@@ -1,10 +1,12 @@
 // chat.js — Hey Bori chat frontend
+// Persists conversation across visits via localStorage.
 // Talks to /api/chat (Vercel serverless function).
 
 (function () {
   'use strict';
 
   const ENDPOINT = '/api/chat';
+  const STORAGE_KEY = 'heyBoriConversation';
 
   const messagesEl = document.getElementById('messages');
   const welcomeEl  = document.getElementById('welcome');
@@ -13,6 +15,7 @@
   const sendBtn    = document.getElementById('send');
   const langEnBtn  = document.getElementById('lang-en');
   const langEsBtn  = document.getElementById('lang-es');
+  const newChatBtn = document.getElementById('newChat');
 
   if (!messagesEl || !inputEl || !sendBtn) {
     console.warn('[Hey Bori] chat markup not found — aborting.');
@@ -26,6 +29,7 @@
       thinking: 'Thinking…',
       error: 'Something went wrong reaching Bori. Please try again in a moment.',
       networkError: "I couldn't reach Bori. Check your connection and try again.",
+      clearConfirm: 'Start a new conversation? Your current chat will be cleared.',
       suggestions: [
         'What exactly is tokenization?',
         'How does tokenized real estate work?',
@@ -40,6 +44,7 @@
       thinking: 'Pensando…',
       error: 'Algo salió mal al conectar con Bori. Por favor intenta de nuevo en un momento.',
       networkError: 'No pude conectar con Bori. Revisa tu conexión y vuelve a intentarlo.',
+      clearConfirm: '¿Comenzar una nueva conversación? Tu chat actual será borrado.',
       suggestions: [
         '¿Qué es exactamente la tokenización?',
         '¿Cómo funcionan los bienes raíces tokenizados?',
@@ -64,22 +69,16 @@
   function setLang(lang) {
     try { localStorage.setItem('heyBoriLang', lang); } catch {}
 
-    // Toggle language-scoped elements
     document.querySelectorAll('[data-lang]').forEach(el => {
       el.classList.toggle('show', el.dataset.lang === lang);
     });
 
-    // Update lang toggle buttons
     if (langEnBtn) langEnBtn.classList.toggle('active', lang === 'en');
     if (langEsBtn) langEsBtn.classList.toggle('active', lang === 'es');
 
-    // Update html lang attribute
     document.documentElement.lang = lang === 'es' ? 'es' : 'en';
-
-    // Update placeholder
     inputEl.placeholder = I18N[lang].placeholder;
 
-    // Re-render suggestions in new language
     renderSuggestions();
   }
 
@@ -107,28 +106,66 @@
   }
 
   // ── CHAT STATE ────────────────────────────────────────────────────────────
-  const history = [];
+  let history = [];
   let conversationStarted = false;
   let isSending = false;
 
+  // ── PERSISTENCE ───────────────────────────────────────────────────────────
+  function saveConversation() {
+    try {
+      if (history.length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      }
+    } catch (err) {
+      console.warn('[Hey Bori] Could not save conversation:', err);
+    }
+  }
+
+  function loadConversation() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      // Filter to only valid message shapes
+      return parsed.filter(m =>
+        m && typeof m === 'object' &&
+        (m.role === 'user' || m.role === 'assistant') &&
+        typeof m.content === 'string' &&
+        m.content.length > 0
+      );
+    } catch (err) {
+      console.warn('[Hey Bori] Could not load conversation:', err);
+      return [];
+    }
+  }
+
+  // ── RENDERING ─────────────────────────────────────────────────────────────
   function startConversation() {
     if (conversationStarted) return;
     conversationStarted = true;
-    if (welcomeEl) welcomeEl.remove();
+    if (welcomeEl && welcomeEl.parentNode) welcomeEl.remove();
   }
 
-  function addMessage(role, content, opts = {}) {
-    const { store = true, isError = false } = opts;
+  function renderMessage(role, content, opts = {}) {
+    const { isError = false } = opts;
     const el = document.createElement('div');
     el.className = 'msg ' + (isError ? 'error' : (role === 'user' ? 'user' : 'bori'));
     el.textContent = content;
     messagesEl.appendChild(el);
+  }
+
+  function addMessage(role, content, opts = {}) {
+    const { store = true, isError = false } = opts;
+    renderMessage(role, content, { isError });
     messagesEl.scrollTop = messagesEl.scrollHeight;
 
     if (store && (role === 'user' || role === 'assistant')) {
       history.push({ role, content });
+      saveConversation();
     }
-    return el;
   }
 
   function showTyping() {
@@ -145,6 +182,101 @@
     isSending = state;
     sendBtn.disabled = state;
     inputEl.disabled = state;
+    if (newChatBtn) newChatBtn.disabled = state;
+  }
+
+  // ── RESTORE PRIOR CONVERSATION ────────────────────────────────────────────
+  function restoreConversation() {
+    const saved = loadConversation();
+    if (saved.length === 0) return;
+
+    history = saved;
+    startConversation();
+    history.forEach(m => renderMessage(m.role, m.content));
+    // Scroll to bottom after DOM settles
+    requestAnimationFrame(() => {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    });
+  }
+
+  // ── NEW CONVERSATION ──────────────────────────────────────────────────────
+  function clearConversation() {
+    if (isSending) return;
+
+    // Only confirm if there's something to clear
+    if (history.length > 0) {
+      const ok = window.confirm(I18N[currentLang()].clearConfirm);
+      if (!ok) return;
+    }
+
+    history = [];
+    saveConversation();
+    messagesEl.innerHTML = '';
+    conversationStarted = false;
+
+    // Rebuild welcome
+    const wrap = document.createElement('div');
+    wrap.className = 'welcome';
+    wrap.id = 'welcome';
+    wrap.innerHTML = `
+      <div class="welcome-eyebrow" data-lang="en">Educational · Independent · Neutral</div>
+      <div class="welcome-eyebrow" data-lang="es">Educativo · Independiente · Neutral</div>
+
+      <h1 class="welcome-title" data-lang="en">Ask me anything about tokenization.</h1>
+      <h1 class="welcome-title" data-lang="es">Pregúntame lo que quieras sobre tokenización.</h1>
+
+      <p class="welcome-sub" data-lang="en">I explain concepts, mechanics, regulation, and risks across tokenized real estate, art, funds, securities, and real-world assets. I don't sell anything. I don't recommend deals. I teach so you can make informed decisions.</p>
+      <p class="welcome-sub" data-lang="es">Explico conceptos, mecánica, regulación y riesgos a través de bienes raíces tokenizados, arte, fondos, valores y activos del mundo real. No vendo nada. No recomiendo ofertas. Enseño para que puedas tomar decisiones informadas.</p>
+
+      <div class="suggestions" id="suggestions"></div>
+    `;
+    messagesEl.appendChild(wrap);
+
+    // Re-point the suggestions ref and re-render
+    const newSuggestEl = document.getElementById('suggestions');
+    if (newSuggestEl) {
+      // Overwrite the outer reference
+      suggestElRef.current = newSuggestEl;
+      renderSuggestionsInto(newSuggestEl);
+    }
+
+    // Re-apply language visibility to the new welcome nodes
+    setLang(currentLang());
+
+    inputEl.focus();
+  }
+
+  // Small ref pattern so renderSuggestions can target the current welcome node
+  const suggestElRef = { current: suggestEl };
+
+  function renderSuggestionsInto(target) {
+    if (!target) return;
+    const lang = currentLang();
+    const items = I18N[lang].suggestions;
+    target.innerHTML = '';
+    items.forEach(text => {
+      const chip = document.createElement('button');
+      chip.className = 'suggestion-chip';
+      chip.type = 'button';
+      chip.textContent = text;
+      chip.addEventListener('click', () => {
+        inputEl.value = text;
+        autoResize();
+        handleSend();
+      });
+      target.appendChild(chip);
+    });
+  }
+
+  // Override renderSuggestions to use the current ref
+  const originalRenderSuggestions = renderSuggestions;
+  // eslint-disable-next-line no-func-assign
+  renderSuggestions = function () {
+    renderSuggestionsInto(suggestElRef.current);
+  };
+
+  if (newChatBtn) {
+    newChatBtn.addEventListener('click', clearConversation);
   }
 
   // ── API CALL ──────────────────────────────────────────────────────────────
@@ -219,6 +351,7 @@
   // ── INIT ──────────────────────────────────────────────────────────────────
   function init() {
     setLang(currentLang());
+    restoreConversation();
     autoResize();
     inputEl.focus();
   }

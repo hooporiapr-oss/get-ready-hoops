@@ -10,8 +10,6 @@
     :root {
       --bg: #06070a;
       --bg-2: #0b0d12;
-      --panel: rgba(255,255,255,0.04);
-      --panel-2: rgba(255,255,255,0.06);
       --text: #f5f3ee;
       --muted: #a8adb8;
       --line: rgba(255,255,255,0.08);
@@ -19,7 +17,6 @@
       --accent-soft: rgba(232,182,74,0.14);
       --accent-warm: #f5d890;
       --ink: #0b0d12;
-      --shadow: 0 30px 80px rgba(0,0,0,0.5);
       --transition: 260ms ease;
     }
 
@@ -55,7 +52,7 @@
 
     .app {
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto auto;
       height: 100dvh;
       max-width: 880px;
       margin: 0 auto;
@@ -64,7 +61,6 @@
       position: relative;
     }
 
-    /* HEADER */
     .top {
       display: flex;
       justify-content: space-between;
@@ -83,22 +79,19 @@
       width: 42px;
       height: 42px;
       border-radius: 14px;
-      position: relative;
       background:
         radial-gradient(circle at 30% 25%, rgba(255,255,255,0.3), transparent 55%),
         linear-gradient(145deg, var(--accent-warm), var(--accent) 60%, #b88c2a);
       box-shadow:
         inset 0 2px 3px rgba(255,255,255,0.35),
         inset 0 -3px 6px rgba(0,0,0,0.25),
-        0 10px 24px rgba(232,182,74,0.3),
-        0 0 28px rgba(232,182,74,0.2);
+        0 10px 24px rgba(232,182,74,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--ink);
       font-weight: 900;
       font-size: 18px;
-      letter-spacing: -0.02em;
     }
 
     .brand-text {
@@ -139,13 +132,12 @@
       font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
-      transition: border-color var(--transition), background var(--transition), color var(--transition);
+      transition: border-color var(--transition), background var(--transition);
     }
 
     .new-chat-btn:hover {
       border-color: rgba(232,182,74,0.4);
       background: rgba(232,182,74,0.06);
-      color: var(--accent-warm);
     }
 
     .new-chat-btn[disabled] {
@@ -155,14 +147,10 @@
 
     .new-chat-icon {
       font-size: 1rem;
-      line-height: 1;
       font-weight: 800;
       color: var(--accent);
     }
 
-    .new-chat-text {
-      letter-spacing: 0.02em;
-    }
     .lang-toggle {
       display: flex;
       align-items: center;
@@ -190,7 +178,6 @@
       color: var(--ink);
     }
 
-    /* WELCOME STATE */
     .welcome {
       display: flex;
       flex-direction: column;
@@ -198,7 +185,6 @@
       justify-content: center;
       text-align: center;
       padding: clamp(16px, 4vw, 40px) 8px;
-      height: 100%;
     }
 
     .welcome-eyebrow {
@@ -224,41 +210,15 @@
       color: var(--muted);
       line-height: 1.7;
       max-width: 52ch;
-      margin: 0 0 28px;
+      margin: 0;
     }
 
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      max-width: 600px;
-    }
-
-    .suggestion-chip {
-      background: rgba(255,255,255,0.035);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: border-color var(--transition), background var(--transition), transform var(--transition);
-    }
-
-    .suggestion-chip:hover {
-      border-color: rgba(232,182,74,0.35);
-      background: rgba(232,182,74,0.06);
-      transform: translateY(-1px);
-    }
-
-    /* MESSAGES */
     .messages {
       flex: 1 1 auto;
       overflow-y: auto;
       overflow-x: hidden;
       min-height: 0;
-      padding: 8px 4px 8px;
+      padding: 8px 4px;
       scroll-behavior: smooth;
     }
 
@@ -285,14 +245,12 @@
       margin-left: auto;
       background: rgba(232,182,74,0.1);
       border-color: rgba(232,182,74,0.25);
-      color: var(--text);
       border-bottom-right-radius: 6px;
     }
 
     .msg.bori {
       margin-right: auto;
       background: rgba(255,255,255,0.035);
-      color: var(--text);
       border-bottom-left-radius: 6px;
     }
 
@@ -311,7 +269,6 @@
       border-radius: 18px;
       border-bottom-left-radius: 6px;
       margin-bottom: 16px;
-      max-width: 88%;
       animation: msgIn 240ms ease;
     }
     .typing span {
@@ -332,7 +289,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* COMPOSER */
     .composer {
       display: flex;
       gap: 10px;
@@ -347,7 +303,6 @@
     .composer:focus-within {
       border-color: rgba(232,182,74,0.45);
       background: rgba(255,255,255,0.05);
-      box-shadow: 0 0 0 4px rgba(232,182,74,0.08);
     }
 
     .composer textarea {
@@ -356,7 +311,7 @@
       border: 0;
       outline: 0;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 16px;
       line-height: 1.5;
       resize: none;
       padding: 8px 10px;
@@ -380,40 +335,26 @@
       align-items: center;
       justify-content: center;
       font-size: 1rem;
-      box-shadow: 0 10px 24px rgba(232,182,74,0.25);
-      transition: transform var(--transition), box-shadow var(--transition);
+      transition: transform var(--transition);
     }
 
     .send-btn:hover { transform: translateY(-1px); }
-    .send-btn:active { transform: translateY(0); }
     .send-btn[disabled] {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
     }
 
-    /* FOOTER DISCLAIMER */
     .disclaimer {
       font-size: 0.72rem;
       color: var(--muted);
       text-align: center;
       padding: 4px 8px 2px;
       line-height: 1.5;
-      letter-spacing: 0.01em;
       opacity: 0.75;
     }
 
-    .disclaimer a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    /* RESPONSIVE */
-    /* ===== MOBILE POLISH ===== */
     @media (max-width: 700px) {
       html, body {
-        height: 100%;
         height: 100dvh;
         overflow: hidden;
       }
@@ -422,111 +363,28 @@
         height: 100dvh;
         padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
         gap: 8px;
-        grid-template-rows: auto 1fr auto auto;
       }
 
-      .top {
-        padding: 4px 2px;
-        gap: 8px;
-      }
-
-      .brand { gap: 10px; }
-      .brand-mark {
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
-        font-size: 16px;
-      }
+      .brand-mark { width: 38px; height: 38px; font-size: 16px; }
       .brand-name { font-size: 0.98rem; }
-      .brand-sub { font-size: 0.62rem; letter-spacing: 0.14em; }
-
-      .header-actions { gap: 6px; }
-      .new-chat-btn {
-        padding: 6px 10px;
-        font-size: 0.75rem;
-      }
+      .brand-sub { font-size: 0.62rem; }
+      .new-chat-btn { padding: 6px 10px; font-size: 0.75rem; }
       .new-chat-text { display: none; }
-      .new-chat-icon { font-size: 1.1rem; }
+      .lang-toggle { padding: 3px 5px; gap: 4px; }
+      .lang-btn { font-size: 0.72rem; padding: 4px 9px; }
 
-      .lang-toggle {
-        padding: 3px 5px;
-        gap: 4px;
-      }
-      .lang-btn {
-        font-size: 0.72rem;
-        padding: 4px 9px;
-      }
+      .welcome-title { font-size: 1.55rem; }
+      .welcome-sub { font-size: 0.9rem; }
 
-      .welcome {
-        padding: 14px 4px 8px;
-      }
-      .welcome-eyebrow {
-        font-size: 0.7rem;
-        margin-bottom: 14px;
-      }
-      .welcome-title {
-        font-size: 1.55rem;
-        margin-bottom: 14px;
-      }
-      .welcome-sub {
-        font-size: 0.9rem;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-      .suggestions { gap: 6px; }
-      .suggestion-chip {
-        font-size: 0.82rem;
-        padding: 9px 12px;
-      }
-
-      .messages {
-        padding: 4px 2px 4px;
-      }
-
-      .msg {
-        font-size: 0.95rem;
-        padding: 12px 14px;
-        max-width: 94%;
-        border-radius: 16px;
-        line-height: 1.6;
-        margin-bottom: 12px;
-      }
-
-      .typing {
-        padding: 14px 16px;
-        margin-bottom: 12px;
-      }
-
-      .composer {
-        padding: 8px;
-        border-radius: 20px;
-        gap: 8px;
-      }
-      .composer textarea {
-        font-size: 16px; /* 16px prevents iOS zoom on focus */
-        padding: 8px 10px;
-        min-height: 28px;
-        max-height: 120px;
-      }
-      .send-btn {
-        width: 42px;
-        height: 42px;
-        min-width: 42px;
-        font-size: 1rem;
-      }
-
-      .disclaimer {
-        font-size: 0.68rem;
-        padding: 2px 6px 0;
-        line-height: 1.45;
-      }
+      .msg { font-size: 0.95rem; padding: 12px 14px; max-width: 94%; }
+      .composer { padding: 8px; border-radius: 20px; }
+      .send-btn { width: 42px; height: 42px; min-width: 42px; }
+      .disclaimer { font-size: 0.68rem; }
     }
 
-    /* Very small screens (iPhone SE, tight Android) */
     @media (max-width: 380px) {
       .brand-text { display: none; }
       .welcome-title { font-size: 1.4rem; }
-      .suggestion-chip { font-size: 0.78rem; padding: 8px 11px; }
     }
 
     [data-lang]:not(.show) { display: none; }
@@ -534,6 +392,7 @@
 </head>
 <body>
   <div class="app">
+
     <!-- HEADER -->
     <div class="top">
       <div class="brand">
@@ -557,23 +416,8 @@
       </div>
     </div>
 
-    <!-- MESSAGES / WELCOME -->
-    <div class="messages" id="messages">
-      <div class="welcome" id="welcome">
-        <div class="welcome-eyebrow" data-lang="en">Educational · Independent · Neutral</div>
-        <div class="welcome-eyebrow" data-lang="es">Educativo · Independiente · Neutral</div>
-
-        <h1 class="welcome-title" data-lang="en">Ask me anything about tokenization.</h1>
-        <h1 class="welcome-title" data-lang="es">Pregúntame lo que quieras sobre tokenización.</h1>
-
-        <p class="welcome-sub" data-lang="en">I explain concepts, mechanics, regulation, and risks across tokenized real estate, art, funds, securities, and real-world assets. I don't sell anything. I don't recommend deals. I teach so you can make informed decisions.</p>
-        <p class="welcome-sub" data-lang="es">Explico conceptos, mecánica, regulación y riesgos a través de bienes raíces tokenizados, arte, fondos, valores y activos del mundo real. No vendo nada. No recomiendo ofertas. Enseño para que puedas tomar decisiones informadas.</p>
-
-        <div class="suggestions" id="suggestions">
-          <!-- populated by JS -->
-        </div>
-      </div>
-    </div>
+    <!-- MESSAGES -->
+    <div class="messages" id="messages"></div>
 
     <!-- COMPOSER -->
     <div class="composer">
@@ -588,6 +432,7 @@
     <div class="disclaimer" data-lang="es">
       Hey Bori proporciona información educativa únicamente, no asesoría legal, fiscal, financiera o de inversión. Para tu situación específica, consulta a un profesional calificado.
     </div>
+
   </div>
 
   <script src="/chat.js" defer></script>

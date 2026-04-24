@@ -1,4 +1,5 @@
 // chat.js — Hoops.Money chat frontend with free/pro gating + PDF export
+// Youth-focused: middle school, HS, early college, parents
 
 (function () {
   'use strict';
@@ -28,38 +29,38 @@
 
   const I18N = {
     en: {
-      placeholder: 'Ask about NIL, contracts, money, agents, taxes…',
-      error: 'Something went wrong. Please try again.',
+      placeholder: 'Ask about NIL, money, offers, social media, anything…',
+      error: 'Something went wrong. Try again in a sec.',
       networkError: "I couldn't reach the server. Check your connection.",
       clearConfirm: 'Start a new conversation? Your current chat will be cleared.',
-      welcomeEyebrow: 'Educational · Independent · Neutral',
-      welcomeTitle: 'The business of basketball — explained clearly.',
-      welcomeSub: "Ask anything about NIL, financial literacy, contracts, agents, taxes, endorsements, and post-career planning. Straight answers. No hype. No selling. No sugar-coating bad deals. Built to help players, families, and coaches navigate the money side of the game.",
-      topics: ['NIL Deals', 'Financial Literacy', 'Contracts', 'Agents', 'Taxes', 'Post-Career'],
-      limitTitle: "You've reached today's free limit",
-      limitBody: "You've used all 15 free messages for today. Upgrade to Pro for unlimited access + download your conversations — $9/month, cancel anytime.",
+      welcomeEyebrow: 'Built for players & families',
+      welcomeTitle: "Real talk about the business of basketball.",
+      welcomeSub: "Middle school. High school. College. Parents trying to figure this out with their kid. Hoops.Money is built for you. NIL, money, branding, decisions — explained straight. No hype. No selling. No adults talking down to you. Ask anything.",
+      topics: ['NIL Basics', 'Money & Taxes', 'Social Media', 'Offers & Red Flags', "Who's Around You", 'Long-Term Thinking'],
+      limitTitle: "You've hit today's free limit",
+      limitBody: "15 messages a day is the free plan. Upgrade to Pro for unlimited access + download your conversations — $9/month, cancel anytime.",
       upgradeCta: 'Upgrade to Pro',
-      proWelcome: "You're Pro. Unlimited access is active, and you can now download any conversation as a PDF. Thanks for supporting Hoops.Money.",
+      proWelcome: "You're Pro. Unlimited access is on, and you can download any conversation as a PDF. Thanks for supporting Hoops.Money.",
       exportLabel: 'Download PDF',
       exportEmpty: 'Start a conversation first, then you can download it as a PDF.',
       exportProOnly: 'Download as PDF is a Pro feature. Upgrade to Pro for unlimited access + conversation downloads.',
       pdfTitle: 'Hoops.Money — Conversation',
       pdfSubtitle: 'The Business of Basketball',
-      pdfFooter: 'Educational information only. Not legal, tax, financial, or investment advice. hoops.money',
+      pdfFooter: 'Educational information only. Not legal, tax, or financial advice. hoops.money',
       pdfUserLabel: 'You',
       pdfAssistantLabel: 'Hoops.Money'
     },
     es: {
-      placeholder: 'Pregunta sobre NIL, contratos, dinero, agentes, impuestos…',
-      error: 'Algo salió mal. Intenta de nuevo.',
+      placeholder: 'Pregunta sobre NIL, dinero, ofertas, redes, lo que sea…',
+      error: 'Algo salió mal. Intenta de nuevo en un momento.',
       networkError: 'No pude conectar con el servidor. Revisa tu conexión.',
       clearConfirm: '¿Comenzar una nueva conversación? Tu chat actual será borrado.',
-      welcomeEyebrow: 'Educativo · Independiente · Neutral',
-      welcomeTitle: 'El negocio del baloncesto — explicado con claridad.',
-      welcomeSub: 'Pregunta lo que quieras sobre NIL, educación financiera, contratos, agentes, impuestos, patrocinios y planificación post-carrera. Respuestas directas. Sin hype. Sin venderte nada. Sin endulzar malos acuerdos. Construido para ayudar a jugadores, familias y entrenadores a navegar el lado financiero del juego.',
-      topics: ['Acuerdos NIL', 'Educación Financiera', 'Contratos', 'Agentes', 'Impuestos', 'Post-Carrera'],
-      limitTitle: 'Alcanzaste el límite gratis de hoy',
-      limitBody: 'Has usado los 15 mensajes gratis del día. Pásate a Pro para acceso ilimitado + descargar tus conversaciones — $9/mes, cancela cuando quieras.',
+      welcomeEyebrow: 'Para jugadores y familias',
+      welcomeTitle: 'Hablando claro sobre el negocio del baloncesto.',
+      welcomeSub: 'Escuela intermedia. Escuela superior. Universidad. Padres tratando de entender todo esto con su hijo. Hoops.Money es para ti. NIL, dinero, imagen, decisiones — explicado directo. Sin hype. Sin venderte nada. Sin adultos hablándote por encima. Pregunta lo que quieras.',
+      topics: ['NIL Básico', 'Dinero e Impuestos', 'Redes Sociales', 'Ofertas y Señales', 'Tu Círculo', 'Pensamiento a Largo Plazo'],
+      limitTitle: 'Llegaste al límite gratis de hoy',
+      limitBody: '15 mensajes al día es el plan gratis. Pásate a Pro para acceso ilimitado + descarga tus conversaciones — $9/mes, cancela cuando quieras.',
       upgradeCta: 'Pásate a Pro',
       proWelcome: 'Eres Pro. Acceso ilimitado activo y ahora puedes descargar cualquier conversación como PDF. Gracias por apoyar a Hoops.Money.',
       exportLabel: 'Descargar PDF',
@@ -67,7 +68,7 @@
       exportProOnly: 'Descargar como PDF es una función Pro. Pásate a Pro para acceso ilimitado + descargas de conversaciones.',
       pdfTitle: 'Hoops.Money — Conversación',
       pdfSubtitle: 'El Negocio del Baloncesto',
-      pdfFooter: 'Información educativa únicamente. No es asesoría legal, fiscal, financiera o de inversión. hoops.money',
+      pdfFooter: 'Información educativa únicamente. No es asesoría legal, fiscal o financiera. hoops.money',
       pdfUserLabel: 'Tú',
       pdfAssistantLabel: 'Hoops.Money'
     }
@@ -322,7 +323,6 @@
       return;
     }
 
-    // Ensure jsPDF is loaded
     if (typeof window.jspdf === 'undefined') {
       alert('PDF library failed to load. Please refresh and try again.');
       return;
@@ -338,7 +338,7 @@
     const marginBottom = 60;
     let y = marginTop;
 
-    // Header
+    // Header bar
     doc.setFillColor(10, 8, 6);
     doc.rect(0, 0, pageW, 50, 'F');
     doc.setFont('helvetica', 'bold');
@@ -374,13 +374,11 @@
     doc.line(marginX, y, pageW - marginX, y);
     y += 20;
 
-    // Messages
     const contentWidth = pageW - marginX * 2;
 
     history.forEach(m => {
       const label = m.role === 'user' ? t.pdfUserLabel : t.pdfAssistantLabel;
 
-      // Label
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       if (m.role === 'user') {
@@ -397,7 +395,6 @@
       doc.text(label, marginX, y);
       y += 14;
 
-      // Content
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10.5);
       doc.setTextColor(50, 50, 50);
@@ -415,7 +412,6 @@
       y += 10;
     });
 
-    // Footer on last page
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -426,7 +422,6 @@
       doc.text(`${i} / ${pageCount}`, pageW - marginX, pageH - 30, { align: 'right' });
     }
 
-    // Save
     const filename = `hoops-money-${new Date().toISOString().slice(0, 10)}.pdf`;
     doc.save(filename);
   }
@@ -499,7 +494,6 @@
     inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
   }
 
-  // Event listeners
   inputEl.addEventListener('input', autoResize);
   inputEl.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {

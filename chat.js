@@ -1,5 +1,5 @@
 // chat.js — Hey Bori chat frontend
-// Persists conversation across visits via localStorage.
+// Clean rebuild. Persists conversation across visits.
 
 (function () {
   'use strict';
@@ -15,17 +15,15 @@
   const newChatBtn = document.getElementById('newChat');
 
   if (!messagesEl || !inputEl || !sendBtn) {
-    console.warn('[Hey Bori] chat markup not found — aborting.');
+    console.error('[Hey Bori] Required markup missing — aborting.');
     return;
   }
 
-  // ── I18N ──────────────────────────────────────────────────────────────────
   const I18N = {
     en: {
       placeholder: 'Ask Bori anything about tokenization…',
-      thinking: 'Thinking…',
-      error: 'Something went wrong reaching Bori. Please try again in a moment.',
-      networkError: "I couldn't reach Bori. Check your connection and try again.",
+      error: 'Something went wrong reaching Bori. Please try again.',
+      networkError: "I couldn't reach Bori. Check your connection.",
       clearConfirm: 'Start a new conversation? Your current chat will be cleared.',
       welcomeEyebrow: 'Educational · Independent · Neutral',
       welcomeTitle: 'Ask me anything about tokenization.',
@@ -33,9 +31,8 @@
     },
     es: {
       placeholder: 'Pregúntale a Bori sobre tokenización…',
-      thinking: 'Pensando…',
-      error: 'Algo salió mal al conectar con Bori. Por favor intenta de nuevo en un momento.',
-      networkError: 'No pude conectar con Bori. Revisa tu conexión y vuelve a intentarlo.',
+      error: 'Algo salió mal al conectar con Bori. Intenta de nuevo.',
+      networkError: 'No pude conectar con Bori. Revisa tu conexión.',
       clearConfirm: '¿Comenzar una nueva conversación? Tu chat actual será borrado.',
       welcomeEyebrow: 'Educativo · Independiente · Neutral',
       welcomeTitle: 'Pregúntame lo que quieras sobre tokenización.',
@@ -43,11 +40,13 @@
     }
   };
 
-  // ── LANGUAGE ──────────────────────────────────────────────────────────────
+  let history = [];
+  let conversationStarted = false;
+  let isSending = false;
+
   function currentLang() {
     try {
-      const stored = localStorage.getItem('heyBoriLang');
-      return stored === 'es' ? 'es' : 'en';
+      return localStorage.getItem('heyBoriLang') === 'es' ? 'es' : 'en';
     } catch {
       return 'en';
     }
@@ -66,29 +65,14 @@
     document.documentElement.lang = lang === 'es' ? 'es' : 'en';
     inputEl.placeholder = I18N[lang].placeholder;
 
-    // If welcome is currently showing, rebuild it in the new language
     if (!conversationStarted) renderWelcome();
   }
 
-  if (langEnBtn) langEnBtn.addEventListener('click', () => setLang('en'));
-  if (langEsBtn) langEsBtn.addEventListener('click', () => setLang('es'));
-
-  // ── STATE ─────────────────────────────────────────────────────────────────
-  let history = [];
-  let conversationStarted = false;
-  let isSending = false;
-
-  // ── PERSISTENCE ───────────────────────────────────────────────────────────
   function saveConversation() {
     try {
-      if (history.length === 0) {
-        localStorage.removeItem(STORAGE_KEY);
-      } else {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-      }
-    } catch (err) {
-      console.warn('[Hey Bori] Could not save conversation:', err);
-    }
+      if (history.length === 0) localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    } catch {}
   }
 
   function loadConversation() {
@@ -98,22 +82,17 @@
       const parsed = JSON.parse(raw);
       if (!Array.isArray(parsed)) return [];
       return parsed.filter(m =>
-        m && typeof m === 'object' &&
-        (m.role === 'user' || m.role === 'assistant') &&
-        typeof m.content === 'string' &&
-        m.content.length > 0
+        m && (m.role === 'user' || m.role === 'assistant') &&
+        typeof m.content === 'string' && m.content.length > 0
       );
-    } catch (err) {
-      console.warn('[Hey Bori] Could not load conversation:', err);
+    } catch {
       return [];
     }
   }
 
-  // ── RENDERING ─────────────────────────────────────────────────────────────
   function renderWelcome() {
     messagesEl.innerHTML = '';
-    const lang = currentLang();
-    const t = I18N[lang];
+    const t = I18N[currentLang()];
 
     const wrap = document.createElement('div');
     wrap.className = 'welcome';
@@ -136,33 +115,11 @@
     messagesEl.appendChild(wrap);
   }
 
-  function renderMessage(role, content, opts) {
-    opts = opts || {};
-    const isError = !!opts.isError;
+  function renderMessage(role, content, isError) {
     const el = document.createElement('div');
     el.className = 'msg ' + (isError ? 'error' : (role === 'user' ? 'user' : 'bori'));
     el.textContent = content;
     messagesEl.appendChild(el);
-  }
-
-  function startConversation() {
-    if (conversationStarted) return;
-    conversationStarted = true;
-    messagesEl.innerHTML = ''; // wipe welcome
-  }
-
-  function addMessage(role, content, opts) {
-    opts = opts || {};
-    const store = opts.store !== false;
-    const isError = !!opts.isError;
-
-    renderMessage(role, content, { isError });
-    scrollToBottom();
-
-    if (store && (role === 'user' || role === 'assistant')) {
-      history.push({ role, content });
-      saveConversation();
-    }
   }
 
   function scrollToBottom() {
@@ -171,10 +128,29 @@
     });
   }
 
+  function startConversation() {
+    if (conversationStarted) return;
+    conversationStarted = true;
+    messagesEl.innerHTML = '';
+  }
+
+  function addMessage(role, content, opts) {
+    opts = opts || {};
+    const store = opts.store !== false;
+    const isError = !!opts.isError;
+
+    renderMessage(role, content, isError);
+    scrollToBottom();
+
+    if (store && (role === 'user' || role === 'assistant')) {
+      history.push({ role, content });
+      saveConversation();
+    }
+  }
+
   function showTyping() {
     const el = document.createElement('div');
     el.className = 'typing';
-    el.setAttribute('aria-label', I18N[currentLang()].thinking);
     el.innerHTML = '<span></span><span></span><span></span>';
     messagesEl.appendChild(el);
     scrollToBottom();
@@ -188,7 +164,6 @@
     if (newChatBtn) newChatBtn.disabled = state;
   }
 
-  // ── RESTORE / RESET ───────────────────────────────────────────────────────
   function restoreConversation() {
     const saved = loadConversation();
     if (saved.length === 0) {
@@ -199,7 +174,7 @@
     history = saved;
     conversationStarted = true;
     messagesEl.innerHTML = '';
-    history.forEach(m => renderMessage(m.role, m.content));
+    history.forEach(m => renderMessage(m.role, m.content, false));
     scrollToBottom();
   }
 
@@ -218,9 +193,6 @@
     inputEl.focus();
   }
 
-  if (newChatBtn) newChatBtn.addEventListener('click', clearConversation);
-
-  // ── API CALL ──────────────────────────────────────────────────────────────
   async function fetchReply() {
     const res = await fetch(ENDPOINT, {
       method: 'POST',
@@ -240,7 +212,6 @@
     return data.reply;
   }
 
-  // ── SEND FLOW ─────────────────────────────────────────────────────────────
   async function handleSend() {
     if (isSending) return;
     const text = (inputEl.value || '').trim();
@@ -261,10 +232,8 @@
     } catch (err) {
       console.error('[Hey Bori] send failed:', err);
       if (typing) typing.remove();
-      const msg =
-        err && err.message && /fetch|network|failed to fetch/i.test(err.message)
-          ? I18N[currentLang()].networkError
-          : I18N[currentLang()].error;
+      const t = I18N[currentLang()];
+      const msg = /fetch|network|failed to fetch/i.test(err.message || '') ? t.networkError : t.error;
       addMessage('assistant', msg, { store: false, isError: true });
     } finally {
       setSending(false);
@@ -272,12 +241,12 @@
     }
   }
 
-  // ── INPUT ─────────────────────────────────────────────────────────────────
   function autoResize() {
     inputEl.style.height = 'auto';
     inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
   }
 
+  // Event listeners
   inputEl.addEventListener('input', autoResize);
 
   inputEl.addEventListener('keydown', function (e) {
@@ -289,7 +258,11 @@
 
   sendBtn.addEventListener('click', handleSend);
 
-  // ── INIT ──────────────────────────────────────────────────────────────────
+  if (langEnBtn) langEnBtn.addEventListener('click', () => setLang('en'));
+  if (langEsBtn) langEsBtn.addEventListener('click', () => setLang('es'));
+  if (newChatBtn) newChatBtn.addEventListener('click', clearConversation);
+
+  // Init
   function init() {
     setLang(currentLang());
     restoreConversation();

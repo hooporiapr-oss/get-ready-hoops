@@ -1,13 +1,38 @@
-// api/chat.js — Hoops.Money advisor endpoint
-// POST JSON: { messages: [{role, content}, ...], language: "en" | "es" }
-// Returns:   { reply: string }
-// Requires env var: ANTHROPIC_API_KEY
+// api/chat.js — Hoops.Money advisor endpoint (with free/pro gating)
+// POST JSON: { messages: [...], language: "en"|"es", isPro: boolean, anonId: string }
+// Returns: { reply: string } or { error, limitReached: true, used, limit }
 
 import Anthropic from "@anthropic-ai/sdk";
 
 const MODEL = "claude-sonnet-4-5-20250929";
 const MAX_TOKENS = 900;
 const MAX_HISTORY_TURNS = 20;
+const FREE_DAILY_LIMIT = 15;
+
+// In-memory usage counter. Resets when the serverless function cold-starts
+// or at midnight UTC (whichever comes first). Good enough for v1.
+const usage = new Map(); // key: "YYYY-MM-DD:anonId" -> count
+let currentDateKey = new Date().toISOString().slice(0, 10);
+
+function getTodayKey() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (today !== currentDateKey) {
+    usage.clear();
+    currentDateKey = today;
+  }
+  return today;
+}
+
+function getUsage(anonId) {
+  const day = getTodayKey();
+  return usage.get(`${day}:${anonId}`) || 0;
+}
+
+function incrementUsage(anonId) {
+  const day = getTodayKey();
+  const key = `${day}:${anonId}`;
+  usage.set(key, (usage.get(key) || 0) + 1);
+}
 
 const SYSTEM_PROMPT = `You are the Hoops.Money educational advisor — the voice of Hoops.Money, a neutral, independent source for understanding the business of basketball.
 
@@ -153,19 +178,36 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed. Use POST." });
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed." });
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("Missing ANTHROPIC_API_KEY environment variable.");
-    return res.status(500).json({ error: "Server is not configured. Contact the site owner." });
+    return res.status(500).json({ error: "Server is not configured." });
   }
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-    const { messages, language } = body;
+    const { messages, language, isPro, anonId } = body;
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: "messages must be a non-empty array." });
+    }
+
+    if (!anonId || typeof anonId !== "string") {
+      return res.status(400).json({ error: "anonId required." });
+    }
+
+    // ── FREE TIER GATING ──────────────────────────────────────────
+    // Pro users skip the limit. Free users are capped at FREE_DAILY_LIMIT per day.
+    if (!isPro) {
+      const used = getUsage(anonId);
+      if (used >= FREE_DAILY_LIMIT) {
+        return res.status(429).json({
+          error: "Daily free limit reached.",
+          limitReached: true,
+          used,
+          limit: FREE_DAILY_LIMIT
+        });
+      }
     }
 
     const cleaned = messages
@@ -198,7 +240,16 @@ export default async function handler(req, res) {
 
     if (!reply) return res.status(502).json({ error: "Empty response from model." });
 
-    return res.status(200).json({ reply });
+    // Only increment usage AFTER a successful reply
+    if (!isPro) incrementUsage(anonId);
+
+    const usedNow = isPro ? null : getUsage(anonId);
+    return res.status(200).json({
+      reply,
+      isPro: !!isPro,
+      used: usedNow,
+      limit: isPro ? null : FREE_DAILY_LIMIT
+    });
   } catch (err) {
     console.error("chat handler error:", err);
     const status = err?.status || 500;

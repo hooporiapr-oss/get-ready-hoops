@@ -1,6 +1,4 @@
-// chat.js — Hoops.Money chat frontend with free/pro gating
-// Anonymous users: 15 messages/day, then prompted to upgrade
-// Pro users: unlimited (status stored in browser after Stripe redirect)
+// chat.js — Hoops.Money chat frontend with free/pro gating + PDF export
 
 (function () {
   'use strict';
@@ -20,6 +18,7 @@
   const newChatBtn   = document.getElementById('newChat');
   const upgradeBtn   = document.getElementById('upgradeBtn');
   const proBadge     = document.getElementById('proBadge');
+  const exportBtn    = document.getElementById('exportBtn');
   const upgradeModal = document.getElementById('upgradeModal');
 
   if (!messagesEl || !inputEl || !sendBtn) {
@@ -38,18 +37,17 @@
       welcomeSub: "Ask anything about NIL, financial literacy, contracts, agents, taxes, endorsements, and post-career planning. Straight answers. No hype. No selling. No sugar-coating bad deals. Built to help players, families, and coaches navigate the money side of the game.",
       topics: ['NIL Deals', 'Financial Literacy', 'Contracts', 'Agents', 'Taxes', 'Post-Career'],
       limitTitle: "You've reached today's free limit",
-      limitBody: "You've used all 15 free messages for today. Upgrade to Pro for unlimited access — $9/month, cancel anytime.",
+      limitBody: "You've used all 15 free messages for today. Upgrade to Pro for unlimited access + download your conversations — $9/month, cancel anytime.",
       upgradeCta: 'Upgrade to Pro',
-      modalTitle: 'Hoops.Money Pro',
-      modalSub: 'Unlimited messages. $9/month. Cancel anytime.',
-      modalBenefit1: 'Unlimited daily messages',
-      modalBenefit2: 'Priority access',
-      modalBenefit3: 'Support independent basketball education',
-      modalClose: 'Maybe later',
-      modalCta: 'Upgrade — $9/month',
-      proActive: 'Pro',
-      proWelcome: "You're Pro. Unlimited access is active. Thanks for supporting Hoops.Money.",
-      upgradeNavLabel: 'Upgrade'
+      proWelcome: "You're Pro. Unlimited access is active, and you can now download any conversation as a PDF. Thanks for supporting Hoops.Money.",
+      exportLabel: 'Download PDF',
+      exportEmpty: 'Start a conversation first, then you can download it as a PDF.',
+      exportProOnly: 'Download as PDF is a Pro feature. Upgrade to Pro for unlimited access + conversation downloads.',
+      pdfTitle: 'Hoops.Money — Conversation',
+      pdfSubtitle: 'The Business of Basketball',
+      pdfFooter: 'Educational information only. Not legal, tax, financial, or investment advice. hoops.money',
+      pdfUserLabel: 'You',
+      pdfAssistantLabel: 'Hoops.Money'
     },
     es: {
       placeholder: 'Pregunta sobre NIL, contratos, dinero, agentes, impuestos…',
@@ -61,18 +59,17 @@
       welcomeSub: 'Pregunta lo que quieras sobre NIL, educación financiera, contratos, agentes, impuestos, patrocinios y planificación post-carrera. Respuestas directas. Sin hype. Sin venderte nada. Sin endulzar malos acuerdos. Construido para ayudar a jugadores, familias y entrenadores a navegar el lado financiero del juego.',
       topics: ['Acuerdos NIL', 'Educación Financiera', 'Contratos', 'Agentes', 'Impuestos', 'Post-Carrera'],
       limitTitle: 'Alcanzaste el límite gratis de hoy',
-      limitBody: 'Has usado los 15 mensajes gratis del día. Pásate a Pro para acceso ilimitado — $9/mes, cancela cuando quieras.',
+      limitBody: 'Has usado los 15 mensajes gratis del día. Pásate a Pro para acceso ilimitado + descargar tus conversaciones — $9/mes, cancela cuando quieras.',
       upgradeCta: 'Pásate a Pro',
-      modalTitle: 'Hoops.Money Pro',
-      modalSub: 'Mensajes ilimitados. $9/mes. Cancela cuando quieras.',
-      modalBenefit1: 'Mensajes ilimitados todos los días',
-      modalBenefit2: 'Acceso prioritario',
-      modalBenefit3: 'Apoya la educación independiente del baloncesto',
-      modalClose: 'Después',
-      modalCta: 'Pásate a Pro — $9/mes',
-      proActive: 'Pro',
-      proWelcome: 'Eres Pro. Acceso ilimitado activo. Gracias por apoyar a Hoops.Money.',
-      upgradeNavLabel: 'Pro'
+      proWelcome: 'Eres Pro. Acceso ilimitado activo y ahora puedes descargar cualquier conversación como PDF. Gracias por apoyar a Hoops.Money.',
+      exportLabel: 'Descargar PDF',
+      exportEmpty: 'Inicia una conversación primero, luego podrás descargarla como PDF.',
+      exportProOnly: 'Descargar como PDF es una función Pro. Pásate a Pro para acceso ilimitado + descargas de conversaciones.',
+      pdfTitle: 'Hoops.Money — Conversación',
+      pdfSubtitle: 'El Negocio del Baloncesto',
+      pdfFooter: 'Información educativa únicamente. No es asesoría legal, fiscal, financiera o de inversión. hoops.money',
+      pdfUserLabel: 'Tú',
+      pdfAssistantLabel: 'Hoops.Money'
     }
   };
 
@@ -80,7 +77,6 @@
   let conversationStarted = false;
   let isSending = false;
 
-  // ── ANONYMOUS ID ──────────────────────────────────────────────
   function getOrCreateAnonId() {
     try {
       let id = localStorage.getItem(ANON_ID_KEY);
@@ -94,13 +90,8 @@
     }
   }
 
-  // ── PRO STATUS ────────────────────────────────────────────────
   function isPro() {
-    try {
-      return localStorage.getItem(PRO_KEY) === 'true';
-    } catch {
-      return false;
-    }
+    try { return localStorage.getItem(PRO_KEY) === 'true'; } catch { return false; }
   }
 
   function setPro(val) {
@@ -115,48 +106,36 @@
     const pro = isPro();
     if (proBadge) proBadge.style.display = pro ? 'inline-flex' : 'none';
     if (upgradeBtn) upgradeBtn.style.display = pro ? 'none' : 'inline-flex';
+    if (exportBtn) exportBtn.style.display = pro ? 'inline-flex' : 'none';
   }
 
-  // Detect Stripe redirect on page load
   function checkStripeRedirect() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('upgraded') === 'true') {
       setPro(true);
-      // Clean the URL so the flag doesn't persist
       window.history.replaceState({}, document.title, window.location.pathname);
-      // Show a brief Pro welcome
       setTimeout(() => {
         addMessage('assistant', I18N[currentLang()].proWelcome, { store: false });
       }, 400);
     }
   }
 
-  // ── LANGUAGE ──────────────────────────────────────────────────
   function currentLang() {
-    try {
-      return localStorage.getItem(LANG_KEY) === 'es' ? 'es' : 'en';
-    } catch {
-      return 'en';
-    }
+    try { return localStorage.getItem(LANG_KEY) === 'es' ? 'es' : 'en'; } catch { return 'en'; }
   }
 
   function setLang(lang) {
     try { localStorage.setItem(LANG_KEY, lang); } catch {}
-
     document.querySelectorAll('[data-lang]').forEach(el => {
       el.classList.toggle('show', el.dataset.lang === lang);
     });
-
     if (langEnBtn) langEnBtn.classList.toggle('active', lang === 'en');
     if (langEsBtn) langEsBtn.classList.toggle('active', lang === 'es');
-
     document.documentElement.lang = lang === 'es' ? 'es' : 'en';
     inputEl.placeholder = I18N[lang].placeholder;
-
     if (!conversationStarted) renderWelcome();
   }
 
-  // ── PERSISTENCE ───────────────────────────────────────────────
   function saveConversation() {
     try {
       if (history.length === 0) localStorage.removeItem(STORAGE_KEY);
@@ -179,7 +158,6 @@
     }
   }
 
-  // ── RENDERING ─────────────────────────────────────────────────
   function renderWelcome() {
     messagesEl.innerHTML = '';
     const t = I18N[currentLang()];
@@ -267,10 +245,8 @@
     opts = opts || {};
     const store = opts.store !== false;
     const isError = !!opts.isError;
-
     renderMessage(role, content, isError);
     scrollToBottom();
-
     if (store && (role === 'user' || role === 'assistant')) {
       history.push({ role, content });
       saveConversation();
@@ -319,7 +295,6 @@
     inputEl.focus();
   }
 
-  // ── UPGRADE MODAL ─────────────────────────────────────────────
   function openUpgradeModal() {
     if (upgradeModal) upgradeModal.classList.add('show');
   }
@@ -329,12 +304,133 @@
   }
 
   function goToCheckout() {
-    // Pass the anon ID so we can link it to the Stripe session later if needed
     const anonId = getOrCreateAnonId();
     window.location.href = STRIPE_CHECKOUT_URL + '?client_reference_id=' + encodeURIComponent(anonId);
   }
 
-  // ── API CALL ──────────────────────────────────────────────────
+  // ── PDF EXPORT ────────────────────────────────────────────────
+  async function exportAsPDF() {
+    const t = I18N[currentLang()];
+
+    if (!isPro()) {
+      alert(t.exportProOnly);
+      return;
+    }
+
+    if (history.length === 0) {
+      alert(t.exportEmpty);
+      return;
+    }
+
+    // Ensure jsPDF is loaded
+    if (typeof window.jspdf === 'undefined') {
+      alert('PDF library failed to load. Please refresh and try again.');
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const marginX = 54;
+    const marginTop = 70;
+    const marginBottom = 60;
+    let y = marginTop;
+
+    // Header
+    doc.setFillColor(10, 8, 6);
+    doc.rect(0, 0, pageW, 50, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Hoops', marginX, 30);
+    doc.setTextColor(240, 183, 74);
+    doc.text('.Money', marginX + doc.getTextWidth('Hoops'), 30);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(200, 200, 200);
+    doc.text(t.pdfSubtitle, pageW - marginX, 30, { align: 'right' });
+
+    // Title + date
+    y = 80;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(30, 30, 30);
+    doc.text(t.pdfTitle, marginX, y);
+
+    y += 18;
+    const dateStr = new Date().toLocaleDateString(
+      currentLang() === 'es' ? 'es-ES' : 'en-US',
+      { year: 'numeric', month: 'long', day: 'numeric' }
+    );
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(130, 130, 130);
+    doc.text(dateStr, marginX, y);
+
+    y += 24;
+    doc.setDrawColor(230, 230, 230);
+    doc.line(marginX, y, pageW - marginX, y);
+    y += 20;
+
+    // Messages
+    const contentWidth = pageW - marginX * 2;
+
+    history.forEach(m => {
+      const label = m.role === 'user' ? t.pdfUserLabel : t.pdfAssistantLabel;
+
+      // Label
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      if (m.role === 'user') {
+        doc.setTextColor(255, 106, 26);
+      } else {
+        doc.setTextColor(40, 40, 40);
+      }
+
+      if (y > pageH - marginBottom - 30) {
+        doc.addPage();
+        y = marginTop;
+      }
+
+      doc.text(label, marginX, y);
+      y += 14;
+
+      // Content
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10.5);
+      doc.setTextColor(50, 50, 50);
+      const lines = doc.splitTextToSize(m.content, contentWidth);
+
+      lines.forEach(line => {
+        if (y > pageH - marginBottom) {
+          doc.addPage();
+          y = marginTop;
+        }
+        doc.text(line, marginX, y);
+        y += 14;
+      });
+
+      y += 10;
+    });
+
+    // Footer on last page
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(160, 160, 160);
+      doc.text(t.pdfFooter, pageW / 2, pageH - 30, { align: 'center' });
+      doc.text(`${i} / ${pageCount}`, pageW - marginX, pageH - 30, { align: 'right' });
+    }
+
+    // Save
+    const filename = `hoops-money-${new Date().toISOString().slice(0, 10)}.pdf`;
+    doc.save(filename);
+  }
+
   async function fetchReply() {
     const res = await fetch(ENDPOINT, {
       method: 'POST',
@@ -384,8 +480,6 @@
     } catch (err) {
       if (typing) typing.remove();
       if (err.limitReached) {
-        // Remove the user message we just added since it wasn't processed
-        // Actually — keep it, just show the upgrade block
         renderLimitMessage();
         setTimeout(openUpgradeModal, 600);
       } else {
@@ -405,6 +499,7 @@
     inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
   }
 
+  // Event listeners
   inputEl.addEventListener('input', autoResize);
   inputEl.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -412,15 +507,14 @@
       handleSend();
     }
   });
-
   sendBtn.addEventListener('click', handleSend);
 
   if (langEnBtn) langEnBtn.addEventListener('click', () => setLang('en'));
   if (langEsBtn) langEsBtn.addEventListener('click', () => setLang('es'));
   if (newChatBtn) newChatBtn.addEventListener('click', clearConversation);
   if (upgradeBtn) upgradeBtn.addEventListener('click', openUpgradeModal);
+  if (exportBtn) exportBtn.addEventListener('click', exportAsPDF);
 
-  // Modal wiring
   if (upgradeModal) {
     const closeBtn = upgradeModal.querySelector('[data-modal-close]');
     const ctaBtn = upgradeModal.querySelector('[data-modal-cta]');

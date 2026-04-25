@@ -1,660 +1,698 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Talk To Bori — Get Ready Hoops</title>
-<meta name="description" content="Free chat with Bori — ask anything about the business of basketball, money, NIL, reputation, and decisions. No signup needed." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Hoops.Money — The Business of Basketball</title>
+  <meta name="description" content="Real talk about the business of basketball — built for middle school, high school, and college players and their families. NIL, money, branding, decisions." />
+  <meta name="theme-color" content="#0a0806" />
+  <meta property="og:title" content="Hoops.Money — The Business of Basketball" />
+  <meta property="og:description" content="Real talk about NIL, money, branding, and decisions — for players and families." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hoops.money" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0806;
+      --bg-2: #13100c;
+      --text: #f6f0e4;
+      --muted: #9e9688;
+      --line: rgba(255,255,255,0.08);
+      --orange: #ff6a1a;
+      --orange-warm: #ff8a3d;
+      --gold: #f0b74a;
+      --gold-warm: #f5d080;
+      --ink: #0a0806;
+      --transition: 260ms ease;
+    }
 
-<!-- jsPDF for PDF export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
-<style>
-:root{
-  --black:#07070b;
-  --dark:#101018;
-  --panel:#171722;
-  --panel2:#202033;
-  --gold:#e8b94a;
-  --gold-dim:rgba(232,185,74,.15);
-  --white:#f4f1e8;
-  --muted:#b9b4a8;
-  --green:#7cff6b;
-  --blue:#48c6ff;
-  --red:#ff4f6d;
-}
+    body {
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,106,26,0.12), transparent 36%),
+        radial-gradient(circle at 88% 82%, rgba(240,183,74,0.09), transparent 40%),
+        linear-gradient(180deg, #07060a 0%, #0a0806 50%, #07060a 100%);
+      -webkit-font-smoothing: antialiased;
+    }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{
-  background:var(--black);
-  color:var(--white);
-  font-family:'Barlow',sans-serif;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-a{text-decoration:none;color:inherit}
-button{font-family:inherit;cursor:pointer}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 140px 140px;
+      mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+      opacity: 0.35;
+      z-index: -1;
+    }
 
-/* HEADER */
-.chat-nav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 20px;
-  background:rgba(7,7,11,.92);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  flex-shrink:0;
-  gap:12px;
-}
-.nav-left{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-.back-link{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:12px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  font-weight:700;
-  padding:8px 12px;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:8px;
-  transition:.2s ease;
-}
-.back-link:hover{border-color:var(--gold);color:var(--gold)}
-.nav-brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.nav-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:900;
-  letter-spacing:2px;
-  font-size:18px;
-  color:var(--white);
-  text-transform:uppercase;
-}
-.nav-title span{color:var(--gold)}
-.nav-sub{
-  font-size:11px;
-  color:var(--green);
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  font-weight:700;
-}
-.nav-right{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.nav-btn{
-  background:transparent;
-  border:1px solid rgba(255,255,255,.12);
-  color:var(--muted);
-  padding:8px 12px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  transition:.2s ease;
-}
-.nav-btn:hover{border-color:var(--gold);color:var(--gold)}
-.lang-toggle{display:flex;gap:4px}
-.lang-btn{
-  background:transparent;
-  border:none;
-  color:var(--muted);
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  font-size:11px;
-  padding:8px 8px;
-}
-.lang-btn.active{color:var(--gold)}
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
 
-/* BORI INTRO BAR */
-.bori-bar{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:12px 20px;
-  background:linear-gradient(90deg, rgba(232,185,74,.08), rgba(232,185,74,.02));
-  border-bottom:1px solid rgba(232,185,74,.15);
-  flex-shrink:0;
-}
-.bori-avatar{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),#a68530);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:900;
-  font-size:18px;
-  color:#111;
-  flex-shrink:0;
-  box-shadow:0 0 20px rgba(232,185,74,.3);
-}
-.bori-info{flex:1;min-width:0}
-.bori-name{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:900;
-  font-size:18px;
-  color:var(--gold);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.online-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 10px var(--green);
-}
-.bori-role{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:2px;
-}
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      height: 100dvh;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 16px clamp(12px, 3vw, 24px);
+      gap: 14px;
+      position: relative;
+    }
 
-/* MESSAGES */
-.messages{
-  flex:1;
-  overflow-y:auto;
-  padding:24px 20px 20px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-.messages::-webkit-scrollbar{width:6px}
-.messages::-webkit-scrollbar-track{background:transparent}
-.messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 4px 4px;
+      gap: 12px;
+    }
 
-.msg{
-  max-width:80%;
-  padding:14px 18px;
-  border-radius:18px;
-  line-height:1.55;
-  font-size:15px;
-  word-wrap:break-word;
-  white-space:pre-wrap;
-}
-.msg.bori{
-  align-self:flex-start;
-  background:linear-gradient(135deg,rgba(232,185,74,.14),rgba(232,185,74,.06));
-  border:1px solid rgba(232,185,74,.25);
-  color:var(--white);
-  border-top-left-radius:4px;
-}
-.msg.bori::before{
-  content:"BORI";
-  display:block;
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  color:var(--gold);
-  opacity:.8;
-  margin-bottom:4px;
-}
-.msg.user{
-  align-self:flex-end;
-  background:rgba(72,198,255,.12);
-  border:1px solid rgba(72,198,255,.22);
-  color:var(--white);
-  border-top-right-radius:4px;
-}
-.msg.system{
-  align-self:center;
-  background:transparent;
-  color:var(--muted);
-  font-size:13px;
-  font-style:italic;
-  max-width:90%;
-  text-align:center;
-  padding:8px 14px;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.typing{
-  align-self:flex-start;
-  padding:14px 18px;
-  border-radius:18px;
-  border-top-left-radius:4px;
-  background:rgba(232,185,74,.08);
-  border:1px solid rgba(232,185,74,.18);
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-.typing span{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--gold);
-  opacity:.5;
-  animation:bounce 1.2s infinite;
-}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
-@keyframes bounce{
-  0%,80%,100%{transform:translateY(0);opacity:.4}
-  40%{transform:translateY(-6px);opacity:1}
-}
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35), transparent 55%),
+        linear-gradient(145deg, var(--orange-warm), var(--orange) 55%, #c94610);
+      box-shadow:
+        inset 0 2px 3px rgba(255,255,255,0.35),
+        inset 0 -3px 6px rgba(0,0,0,0.25),
+        0 10px 24px rgba(255,106,26,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* INPUT */
-.composer{
-  padding:16px 20px;
-  background:rgba(7,7,11,.95);
-  backdrop-filter:blur(10px);
-  border-top:1px solid rgba(255,255,255,.08);
-  flex-shrink:0;
-  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
-}
-.composer-row{
-  display:flex;
-  align-items:flex-end;
-  gap:10px;
-  background:var(--panel);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:18px;
-  padding:8px 8px 8px 16px;
-  transition:border-color .2s;
-}
-.composer-row:focus-within{
-  border-color:rgba(232,185,74,.4);
-}
-.composer textarea{
-  flex:1;
-  background:transparent;
-  border:none;
-  color:var(--white);
-  font-family:'Barlow',sans-serif;
-  font-size:15px;
-  resize:none;
-  outline:none;
-  max-height:120px;
-  line-height:1.5;
-  padding:8px 0;
-}
-.composer textarea::placeholder{color:var(--muted)}
-.send-btn{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:var(--gold);
-  color:#111;
-  border:none;
-  font-size:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  flex-shrink:0;
-  transition:.2s ease;
-}
-.send-btn:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(232,185,74,.4)}
-.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+    .brand-mark svg { width: 26px; height: 26px; }
 
-.disclaimer{
-  text-align:center;
-  font-size:11px;
-  color:#555;
-  margin-top:8px;
-  letter-spacing:.5px;
-}
+    .brand-text { display: flex; flex-direction: column; gap: 2px; }
+    .brand-name { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.015em; }
+    .brand-name .dot { color: var(--gold); }
+    .brand-sub { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 
-/* SUGGESTIONS */
-.suggestions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-  padding:0 2px;
-}
-.suggestion{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.1);
-  color:var(--muted);
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.2s ease;
-}
-.suggestion:hover{
-  border-color:rgba(232,185,74,.5);
-  color:var(--gold);
-  background:rgba(232,185,74,.05);
-}
+    .header-actions { display: flex; align-items: center; gap: 8px; }
 
-@media (max-width: 600px){
-  .nav-sub{display:none}
-  .back-link::after{content:"← Back"}
-  .msg{max-width:90%}
-  .nav-btn{padding:7px 10px;font-size:10px}
-}
-</style>
+    .upgrade-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, var(--orange-warm), var(--orange));
+      border: 0;
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(255,106,26,0.3);
+      transition: transform var(--transition);
+    }
+
+    .upgrade-btn:hover { transform: translateY(-1px); }
+
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, var(--gold-warm), var(--gold));
+      color: var(--ink);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .pro-badge::before { content: "★"; font-size: 0.8rem; }
+
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(240, 183, 74, 0.1);
+      border: 1px solid rgba(240, 183, 74, 0.35);
+      color: var(--gold-warm);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .export-btn:hover {
+      border-color: rgba(240, 183, 74, 0.6);
+      background: rgba(240, 183, 74, 0.18);
+    }
+
+    .export-icon {
+      font-size: 0.9rem;
+      color: var(--gold);
+    }
+
+    .new-chat-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .new-chat-btn:hover {
+      border-color: rgba(255,106,26,0.4);
+      background: rgba(255,106,26,0.06);
+    }
+
+    .new-chat-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+    .new-chat-icon { font-size: 1rem; font-weight: 800; color: var(--orange); }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .lang-btn.active { background: var(--orange); color: #fff; }
+
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(16px, 4vw, 40px) 8px;
+    }
+
+    .welcome-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--orange-warm);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .welcome-title {
+      font-size: clamp(2rem, 5.2vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      font-weight: 800;
+      margin: 0 0 18px;
+      max-width: 20ch;
+    }
+
+    .welcome-title .accent { color: var(--orange-warm); }
+
+    .welcome-sub {
+      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 56ch;
+      margin: 0 0 24px;
+    }
+
+    .welcome-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 560px;
+    }
+
+    .topic-chip {
+      background: rgba(255,106,26,0.08);
+      border: 1px solid rgba(255,106,26,0.2);
+      color: var(--gold-warm);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .messages {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+      padding: 8px 4px;
+      scroll-behavior: smooth;
+    }
+
+    .messages::-webkit-scrollbar { width: 6px; }
+    .messages::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+    }
+
+    .msg {
+      margin-bottom: 16px;
+      max-width: 88%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      line-height: 1.65;
+      font-size: 0.96rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border: 1px solid var(--line);
+      animation: msgIn 240ms ease;
+    }
+
+    .msg.user {
+      margin-left: auto;
+      background: rgba(255,106,26,0.1);
+      border-color: rgba(255,106,26,0.28);
+      border-bottom-right-radius: 6px;
+    }
+
+    .msg.bori {
+      margin-right: auto;
+      background: rgba(255,255,255,0.035);
+      border-bottom-left-radius: 6px;
+    }
+
+    .msg.error {
+      background: rgba(255, 90, 90, 0.08);
+      border-color: rgba(255, 90, 90, 0.3);
+      color: #ffd0d0;
+    }
+
+    .msg.limit-notice {
+      background: linear-gradient(135deg, rgba(255,106,26,0.08), rgba(240,183,74,0.06));
+      border-color: rgba(255,106,26,0.32);
+      padding: 18px 20px;
+      max-width: 92%;
+      white-space: normal;
+    }
+
+    .limit-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .limit-body {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      font-size: 0.94rem;
+    }
+
+    .limit-upgrade-btn {
+      background: linear-gradient(135deg, var(--orange-warm), var(--orange));
+      border: 0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(255,106,26,0.28);
+      transition: transform var(--transition);
+    }
+
+    .limit-upgrade-btn:hover { transform: translateY(-1px); }
+
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      border-bottom-left-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: var(--muted);
+      animation: typing 1.2s infinite ease-in-out;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .composer {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      padding: 10px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .composer:focus-within {
+      border-color: rgba(255,106,26,0.45);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .composer textarea {
+      flex: 1;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+      resize: none;
+      padding: 8px 10px;
+      max-height: 160px;
+      min-height: 28px;
+    }
+
+    .composer textarea::placeholder { color: var(--muted); }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--orange-warm), var(--orange));
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 8px 20px rgba(255,106,26,0.3);
+      transition: transform var(--transition);
+    }
+
+    .send-btn:hover { transform: translateY(-1px); }
+    .send-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+    .disclaimer {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 4px 8px 2px;
+      line-height: 1.5;
+      opacity: 0.75;
+    }
+
+    /* ── UPGRADE MODAL ── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal.show { display: flex; animation: fadeIn 200ms ease; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 3, 1, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      position: relative;
+      background: linear-gradient(145deg, #15110d, #0c0a08);
+      border: 1px solid rgba(255,106,26,0.28);
+      border-radius: 22px;
+      padding: 32px 28px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,106,26,0.08);
+      text-align: center;
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+
+    .modal-title .accent { color: var(--orange-warm); }
+
+    .modal-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 24px;
+    }
+
+    .modal-benefits {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      text-align: left;
+    }
+
+    .modal-benefits li {
+      padding: 10px 0;
+      color: var(--text);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .modal-benefits li:last-child { border-bottom: 0; }
+
+    .modal-benefits li::before {
+      content: "✓";
+      color: var(--orange-warm);
+      font-weight: 900;
+      font-size: 1rem;
+      min-width: 16px;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-cta {
+      background: linear-gradient(135deg, var(--orange-warm), var(--orange));
+      border: 0;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(255,106,26,0.3);
+      transition: transform var(--transition);
+    }
+
+    .modal-cta:hover { transform: translateY(-1px); }
+
+    .modal-close {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      padding: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+
+    .modal-close:hover { color: var(--text); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+      html, body { height: 100dvh; overflow: hidden; }
+      .app { height: 100dvh; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 8px; }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand-mark svg { width: 22px; height: 22px; }
+      .brand-name { font-size: 1rem; }
+      .brand-sub { font-size: 0.6rem; letter-spacing: 0.14em; }
+      .upgrade-btn { padding: 6px 10px; font-size: 0.72rem; }
+      .pro-badge { padding: 4px 8px; font-size: 0.68rem; }
+      .export-btn { padding: 6px 10px; font-size: 0.72rem; }
+      .export-text { display: none; }
+      .new-chat-btn { padding: 6px 10px; font-size: 0.75rem; }
+      .new-chat-text { display: none; }
+      .lang-toggle { padding: 3px 5px; gap: 4px; }
+      .lang-btn { font-size: 0.72rem; padding: 4px 9px; }
+      .welcome-title { font-size: 1.65rem; }
+      .welcome-sub { font-size: 0.9rem; }
+      .topic-chip { font-size: 0.76rem; padding: 5px 10px; }
+      .msg { font-size: 0.95rem; padding: 12px 14px; max-width: 94%; }
+      .composer { padding: 8px; border-radius: 20px; }
+      .send-btn { width: 42px; height: 42px; min-width: 42px; }
+      .disclaimer { font-size: 0.68rem; }
+      .modal-content { padding: 26px 22px; }
+      .modal-title { font-size: 1.4rem; }
+    }
+
+    @media (max-width: 380px) {
+      .brand-text { display: none; }
+      .welcome-title { font-size: 1.45rem; }
+    }
+
+    [data-lang]:not(.show) { display: none; }
+  </style>
 </head>
 <body>
+  <div class="app">
 
-<nav class="chat-nav">
-  <div class="nav-left">
-    <a href="/" class="back-link" data-en="← Back" data-es="← Volver">← <span></a>
-    <div class="nav-brand">
-      <div class="nav-sub" data-en="Free Chat" data-es="Chat Gratis">Free Chat</div>
+    <div class="top">
+      <div class="brand">
+        <div class="brand-mark" aria-label="Hoops.Money logo">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="13" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.95"/>
+            <path d="M3 16 Q 16 10 29 16" stroke="#fff" stroke-width="1.4" fill="none" opacity="0.85"/>
+            <path d="M3 16 Q 16 22 29 16" stroke="#fff" stroke-width="1.4" fill="none" opacity="0.85"/>
+            <path d="M16 3 L 16 29" stroke="#fff" stroke-width="1.4" opacity="0.85"/>
+            <text x="16" y="21" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="900" fill="#f0b74a" stroke="#0a0806" stroke-width="0.4">$</text>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">Hoops<span class="dot">.</span>Money</div>
+          <div class="brand-sub" data-lang="en">The Business of Basketball</div>
+          <div class="brand-sub" data-lang="es">El Negocio del Baloncesto</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="upgrade-btn" id="upgradeBtn" type="button" style="display:none">
+          <span data-lang="en">Pro</span>
+          <span data-lang="es">Pro</span>
+        </button>
+        <span class="pro-badge" id="proBadge" style="display:none">
+          <span data-lang="en">Pro</span>
+          <span data-lang="es">Pro</span>
+        </span>
+        <button class="export-btn" id="exportBtn" type="button" style="display:none" aria-label="Download conversation as PDF">
+          <span class="export-icon">⬇</span>
+          <span class="export-text" data-lang="en">PDF</span>
+          <span class="export-text" data-lang="es">PDF</span>
+        </button>
+        <button class="new-chat-btn" id="newChat" type="button" aria-label="Start a new conversation">
+          <span class="new-chat-icon">＋</span>
+          <span class="new-chat-text" data-lang="en">New</span>
+          <span class="new-chat-text" data-lang="es">Nuevo</span>
+        </button>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="lang-en">EN</button>
+          <button class="lang-btn" id="lang-es">ES</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="composer">
+      <textarea id="input" rows="1" placeholder="Ask about NIL, money, offers, social media, anything…" aria-label="Message"></textarea>
+      <button id="send" class="send-btn" aria-label="Send">➜</button>
+    </div>
+
+    <div class="disclaimer" data-lang="en">
+      Hoops.Money helps you understand how the business of basketball works. We don't replace a sports attorney, CPA, or certified advisor — for your specific situation, get a real pro.
+    </div>
+    <div class="disclaimer" data-lang="es">
+      Hoops.Money te ayuda a entender cómo funciona el negocio del baloncesto. No reemplazamos a un abogado deportivo, CPA o asesor certificado — para tu situación específica, busca a un profesional real.
+    </div>
+
+  </div>
+
+  <!-- UPGRADE MODAL -->
+  <div class="modal" id="upgradeModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2 class="modal-title">
+        <span data-lang="en">Hoops<span class="accent">.Money</span> Pro</span>
+        <span data-lang="es">Hoops<span class="accent">.Money</span> Pro</span>
+      </h2>
+      <p class="modal-sub">
+        <span data-lang="en">Unlimited messages. $9/month. Cancel anytime.</span>
+        <span data-lang="es">Mensajes ilimitados. $9/mes. Cancela cuando quieras.</span>
+      </p>
+      <ul class="modal-benefits">
+        <li>
+          <span data-lang="en">Unlimited daily messages</span>
+          <span data-lang="es">Mensajes ilimitados todos los días</span>
+        </li>
+        <li>
+          <span data-lang="en">Download any conversation as PDF</span>
+          <span data-lang="es">Descarga cualquier conversación como PDF</span>
+        </li>
+        <li>
+          <span data-lang="en">Support independent basketball education</span>
+          <span data-lang="es">Apoya la educación independiente del baloncesto</span>
+        </li>
+      </ul>
+      <div class="modal-actions">
+        <button class="modal-cta" data-modal-cta type="button">
+          <span data-lang="en">Upgrade — $9/month</span>
+          <span data-lang="es">Pásate a Pro — $9/mes</span>
+        </button>
+        <button class="modal-close" data-modal-close type="button">
+          <span data-lang="en">Maybe later</span>
+          <span data-lang="es">Después</span>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="nav-right">
-    <button class="nav-btn" id="newChatBtn" data-en="New" data-es="Nuevo">New</button>
-    <button class="nav-btn" id="pdfBtn" data-en="PDF" data-es="PDF">PDF</button>
-    <div class="lang-toggle">
-      <button class="lang-btn active" data-lang="en">EN</button>
-      <button class="lang-btn" data-lang="es">ES</button>
-    </div>
-  </div>
-</nav>
 
-<div class="bori-bar">
-  <div class="bori-avatar">B</div>
-  <div class="bori-info">
-    <div class="bori-name">Bori <span class="online-dot"></span></div>
-    <div class="bori-role" data-en="Your mentor for the business of basketball" data-es="Tu mentor para el negocio del baloncesto">Your mentor for the business of basketball</div>
-  </div>
-</div>
-
-<div class="messages" id="messages">
-  <!-- Messages render here -->
-</div>
-
-<div class="composer">
-  <div class="composer-row">
-    <textarea id="input" rows="1" data-en-placeholder="Ask Bori anything..." data-es-placeholder="Pregúntale lo que sea a Bori..." placeholder="Ask Bori anything..."></textarea>
-    <button class="send-btn" id="sendBtn" aria-label="Send">→</button>
-  </div>
-  <div class="disclaimer" data-en="Educational content only. Not legal or financial advice." data-es="Contenido educativo solamente. No son consejos legales o financieros.">Educational content only. Not legal or financial advice.</div>
-</div>
-
-<script>
-// ─────────── LANGUAGE ───────────
-let currentLang = localStorage.getItem('grhLang') || 'en';
-
-function setLang(lang){
-  currentLang = lang;
-  localStorage.setItem('grhLang', lang);
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute('data-' + lang);
-    if(text && !el.hasAttribute('data-en-placeholder')){
-      el.textContent = text;
-    }
-  });
-
-  document.querySelectorAll('[data-en-placeholder]').forEach(el => {
-    const ph = el.getAttribute('data-' + lang + '-placeholder');
-    if(ph) el.placeholder = ph;
-  });
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
-}
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => setLang(btn.dataset.lang));
-});
-setLang(currentLang);
-
-// ─────────── ANON ID ───────────
-function getAnonId(){
-  let id = localStorage.getItem('grhAnonId');
-  if(!id){
-    id = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem('grhAnonId', id);
-  }
-  return id;
-}
-const anonId = getAnonId();
-
-// ─────────── STATE ───────────
-const STORAGE_KEY = 'grhConversation';
-let messages = [];
-
-function loadConversation(){
-  try{
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(saved){
-      messages = JSON.parse(saved);
-    }
-  }catch(e){ messages = []; }
-}
-
-function saveConversation(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-  }catch(e){}
-}
-
-function clearConversation(){
-  messages = [];
-  saveConversation();
-  renderMessages();
-  showGreeting();
-}
-
-// ─────────── WELCOME ───────────
-const WELCOME = {
-  en: "What's up. I'm Bori — your mentor for the business side of basketball.\n\nI'm here to help you think. About money, reputation, decisions, pressure, and everything most players figure out too late.\n\nAsk me anything.",
-  es: "¿Qué tal? Soy Bori — tu mentor para el lado de negocio del baloncesto.\n\nEstoy aquí para hacerte pensar. Sobre el dinero, la reputación, las decisiones, la presión, y todo lo que la mayoría de los jugadores entienden demasiado tarde.\n\nPregúntame lo que sea. Y si no sabes por dónde empezar, prueba una de las preguntas de abajo."
-};
-
-function showGreeting(){
-  if(messages.length === 0){
-    renderSingleMessage('bori', WELCOME[currentLang] || WELCOME.en);
-  }
-}
-
-// ─────────── RENDER ───────────
-const messagesEl = document.getElementById('messages');
-
-function renderSingleMessage(role, content){
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.textContent = content;
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function renderMessages(){
-  messagesEl.innerHTML = '';
-  for(const m of messages){
-    renderSingleMessage(m.role === 'assistant' ? 'bori' : 'user', m.content);
-  }
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function showTyping(){
-  const div = document.createElement('div');
-  div.className = 'typing';
-  div.id = 'typingIndicator';
-  div.innerHTML = '<span></span><span></span><span></span>';
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function hideTyping(){
-  const el = document.getElementById('typingIndicator');
-  if(el) el.remove();
-}
-
-// ─────────── SEND ───────────
-const input = document.getElementById('input');
-const sendBtn = document.getElementById('sendBtn');
-
-function autoResize(){
-  input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-}
-input.addEventListener('input', autoResize);
-
-input.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-sendBtn.addEventListener('click', sendMessage);
-
-document.querySelectorAll('.suggestion').forEach(s => {
-  s.addEventListener('click', () => {
-    input.value = s.textContent;
-    autoResize();
-    sendMessage();
-  });
-});
-
-async function sendMessage(){
-  const text = input.value.trim();
-  if(!text) return;
-
-  // Add user message
-  messages.push({ role: 'user', content: text });
-  renderSingleMessage('user', text);
-  saveConversation();
-
-  input.value = '';
-  autoResize();
-  sendBtn.disabled = true;
-
-  // Hide suggestions after first message
-  document.getElementById('suggestions').style.display = 'none';
-
-  showTyping();
-
-  try{
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: messages,
-        anonId: anonId,
-        lang: currentLang
-      })
-    });
-
-    hideTyping();
-
-    if(!res.ok){
-      const err = await res.json().catch(() => ({}));
-      const errMsg = err.error || (currentLang === 'es'
-        ? 'Algo salió mal. Intenta de nuevo.'
-        : 'Something went wrong. Please try again.');
-      renderSingleMessage('bori', errMsg);
-      sendBtn.disabled = false;
-      return;
-    }
-
-    const data = await res.json();
-    const reply = data.reply || (currentLang === 'es'
-      ? 'No pude responder. Intenta de nuevo.'
-      : "I couldn't respond. Try again.");
-
-    messages.push({ role: 'assistant', content: reply });
-    renderSingleMessage('bori', reply);
-    saveConversation();
-
-  }catch(e){
-    hideTyping();
-    renderSingleMessage('bori', currentLang === 'es'
-      ? 'Error de conexión. Intenta de nuevo.'
-      : 'Connection error. Try again.');
-  }
-
-  sendBtn.disabled = false;
-  input.focus();
-}
-
-// ─────────── NEW CHAT ───────────
-document.getElementById('newChatBtn').addEventListener('click', () => {
-  if(messages.length > 0 && !confirm(currentLang === 'es'
-    ? '¿Empezar una nueva conversación? Se borrará la actual.'
-    : 'Start a new conversation? This will clear the current one.')) return;
-  clearConversation();
-  document.getElementById('suggestions').style.display = 'flex';
-});
-
-// ─────────── PDF EXPORT ───────────
-document.getElementById('pdfBtn').addEventListener('click', () => {
-  if(messages.length === 0){
-    alert(currentLang === 'es' ? 'No hay conversación para exportar.' : 'No conversation to export.');
-    return;
-  }
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const pageWidth = doc.internal.pageSize.width;
-  const margin = 15;
-  const maxWidth = pageWidth - (margin * 2);
-  let y = 20;
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.text('Get Ready Hoops — ' + (currentLang === 'es' ? 'Conversación con Bori' : 'Conversation with Bori'), margin, y);
-  y += 10;
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(120);
-  doc.text(new Date().toLocaleString(), margin, y);
-  y += 10;
-  doc.setTextColor(0);
-
-  for(const m of messages){
-    const label = m.role === 'assistant' ? 'Bori:' : (currentLang === 'es' ? 'Tú:' : 'You:');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    if(y > 270){ doc.addPage(); y = 20; }
-    doc.text(label, margin, y);
-    y += 6;
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    const lines = doc.splitTextToSize(m.content, maxWidth);
-    for(const line of lines){
-      if(y > 280){ doc.addPage(); y = 20; }
-      doc.text(line, margin, y);
-      y += 5;
-    }
-    y += 4;
-  }
-
-  doc.save('get-ready-hoops-bori-' + Date.now() + '.pdf');
-});
-
-// ─────────── INIT ───────────
-loadConversation();
-renderMessages();
-showGreeting();
-input.focus();
-</script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="/chat.js" defer></script>
 </body>
 </html>

@@ -1,444 +1,481 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Episode 001: Basketball Money — Get Ready Hoops</title>
 <meta name="description" content="Why players get opportunities — and why talent alone is not enough. The first episode of Get Ready Hoops with Bori." />
+<meta property="og:title" content="Episode 001: Basketball Money — Get Ready Hoops" />
+<meta property="og:description" content="Skill gets you noticed. Value gets you chosen. Why would someone choose you?" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://getreadyhoops.com/episode-001.html" />
+<meta property="og:image" content="https://getreadyhoops.com/ready.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --surface-2: #1c1c1c;
-    --border: #2a2a2a;
-    --text: #ededed;
-    --muted: #8a8a8a;
-    --accent: #ff7a00;
-    --bori: #ff7a00;
-    --host: #d4d4d4;
-    --player: #6ea8ff;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+:root{
+  --black:#07070b;
+  --dark:#101018;
+  --panel:#171722;
+  --panel2:#202033;
+  --white:#f4f1e8;
+  --muted:#b9b4a8;
+  --green:#7cff6b;
+  --blue:#48c6ff;
+  --red:#ff4f6d;
+  --purple:#b66cff;
+  --orange:#ff9f43;
 
-  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  /* ====== EPISODE ACCENT — change this one variable per episode ====== */
+  /* Episode 001: Basketball Money — Level 1: Awareness — Gold */
+  --accent:#e8b94a;
+  --accent-soft:rgba(232,185,74,.13);
+  --accent-border:rgba(232,185,74,.25);
+  --accent-glow:rgba(232,185,74,.4);
+  /* =================================================================== */
 
-  header.top {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 32px;
-  }
-  .brand { font-weight: 700; letter-spacing: 0.2px; }
-  .brand a { color: var(--text); }
-  .lang {
-    display: inline-flex; gap: 0; border: 1px solid var(--border); border-radius: 999px; overflow: hidden;
-  }
-  .lang button {
-    background: transparent; color: var(--muted); border: 0; padding: 6px 14px;
-    font-size: 13px; cursor: pointer; font-weight: 600; letter-spacing: 0.5px;
-  }
-  .lang button.active { background: var(--text); color: var(--bg); }
+  --host:var(--blue);
+  --host-soft:rgba(72,198,255,.12);
+  --host-border:rgba(72,198,255,.22);
+  --player:var(--white);
+  --player-soft:rgba(244,241,232,.06);
+  --player-border:rgba(244,241,232,.14);
+}
 
-  .badge {
-    display: inline-block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 12px;
-  }
-  h1 {
-    font-size: 40px; line-height: 1.15; margin: 0 0 12px; font-weight: 800; letter-spacing: -0.5px;
-  }
-  .sub { color: var(--muted); font-size: 17px; margin: 0 0 32px; }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
+  line-height:1.55;
+}
+a{text-decoration:none;color:inherit}
 
-  .step-label {
-    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
-    margin: 40px 0 12px;
-  }
+/* ---------------- NAV ---------------- */
+.nav{position:fixed;top:0;left:0;width:100%;z-index:50;padding:16px 7% 12px;background:rgba(7,7,11,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08);}
+.nav-top{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:2px;font-size:22px;color:var(--white);text-transform:uppercase;}
+.nav-logo span{color:var(--accent)}
+.lang-toggle{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:13px;letter-spacing:1px;text-transform:uppercase;}
+.lang-btn{background:transparent;border:none;color:var(--muted);font-family:'Barlow',sans-serif;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:4px 6px;font-size:13px;}
+.lang-btn.active,.lang-btn:hover{color:var(--accent)}
+.lang-sep{color:var(--muted);opacity:.4}
 
-  .script {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 8px 4px;
-  }
-  .line {
-    display: grid; grid-template-columns: 70px 1fr; gap: 12px;
-    padding: 14px 16px;
-  }
-  .line + .line { border-top: 1px solid var(--border); }
-  .who {
-    font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-    padding-top: 2px;
-  }
-  .who.host { color: var(--host); }
-  .who.bori { color: var(--bori); }
-  .said { color: var(--text); font-size: 15.5px; }
+/* ---------------- HEADER (episode hero) ---------------- */
+.episode-hero{position:relative;padding:140px 7% 50px 7%;overflow:hidden;background:radial-gradient(circle at 30% 20%, rgba(232,185,74,.10), transparent 50%),linear-gradient(180deg,#09090e,#07070b);}
+.episode-hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:42px 42px;opacity:.25;pointer-events:none;}
+.episode-hero-inner{position:relative;z-index:2;max-width:880px;margin:0 auto;}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--accent-border);color:var(--accent);border-radius:999px;text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:800;margin-bottom:24px;background:var(--accent-soft);}
+.eyebrow .live-dot{width:8px;height:8px;border-radius:50%;background:#cc0030;box-shadow:0 0 10px #ff3a5e;animation:livePulse 1.6s ease-in-out infinite;}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
+.episode-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:3px;font-size:14px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
+h1.episode-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,9vw,104px);line-height:.9;font-weight:900;text-transform:uppercase;margin-bottom:18px;text-shadow:0 4px 30px rgba(0,0,0,.55);}
+.episode-sub{color:var(--muted);font-size:clamp(17px,2.2vw,21px);max-width:680px;line-height:1.5;}
 
-  .question-block {
-    margin: 40px 0 24px; padding: 28px 24px;
-    background: linear-gradient(180deg, #1a1408, #141414);
-    border: 1px solid #3a2a10; border-radius: 12px;
-  }
-  .question-label {
-    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
-    margin-bottom: 8px; font-weight: 700;
-  }
-  .question {
-    font-size: 26px; line-height: 1.25; margin: 0; font-weight: 700; letter-spacing: -0.3px;
-  }
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:32px;transition:color .2s ease;}
+.back-link:hover{color:var(--accent)}
+.back-link::before{content:"←";display:inline-block;transition:transform .2s ease;}
+.back-link:hover::before{transform:translateX(-3px);}
 
-  .chat {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px; min-height: 120px;
-  }
-  .msg { display: grid; grid-template-columns: 70px 1fr; gap: 12px; padding: 10px 4px; }
-  .msg + .msg { border-top: 1px solid var(--border); }
-  .msg .who { padding-top: 2px; }
-  .msg.bori .who { color: var(--bori); }
-  .msg.player .who { color: var(--player); }
-  .msg .said { white-space: pre-wrap; word-wrap: break-word; }
+/* ---------------- STEP STRIP ---------------- */
+.step-strip{display:flex;gap:0;justify-content:center;margin:0 auto 30px;max-width:600px;border:1px solid rgba(255,255,255,.06);border-radius:999px;padding:6px;background:var(--dark);}
+.step-pill{flex:1;text-align:center;padding:8px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-radius:999px;}
+.step-pill.current{background:var(--accent);color:#111;}
 
-  /* Blinking cursor while streaming */
-  .said.streaming::after {
-    content: "▍";
-    display: inline-block;
-    margin-left: 2px;
-    color: var(--accent);
-    animation: blink 1s steps(2, start) infinite;
-  }
-  @keyframes blink { to { visibility: hidden; } }
+/* ---------------- SECTIONS ---------------- */
+section{padding:60px 7%;}
+.section-inner{max-width:880px;margin:0 auto;}
+.section-label{font-family:'Barlow Condensed',sans-serif;color:var(--accent);font-weight:900;letter-spacing:3px;font-size:13px;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:10px;}
+.section-label::before{content:"";width:32px;height:2px;background:var(--accent);}
+h2.section-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,5.5vw,56px);line-height:.95;font-weight:900;text-transform:uppercase;margin-bottom:28px;}
+h2.section-h span{color:var(--accent)}
 
-  .composer {
-    display: flex; gap: 8px; margin-top: 12px;
-  }
-  .composer textarea {
-    flex: 1; resize: none; min-height: 52px; max-height: 160px;
-    background: var(--surface-2); color: var(--text); border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px 14px; font: inherit; font-size: 15px;
-    outline: none;
-  }
-  .composer textarea:focus { border-color: #4a4a4a; }
-  .composer button {
-    background: var(--text); color: var(--bg); border: 0; border-radius: 10px;
-    padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 14px; letter-spacing: 0.3px;
-  }
-  .composer button:disabled { opacity: 0.5; cursor: not-allowed; }
+/* ---------------- LISTEN: scripted bubbles ---------------- */
+.script{background:linear-gradient(180deg,#151520,#0f0f17);border:1px solid var(--accent-border);border-radius:28px;padding:28px;box-shadow:0 0 70px rgba(232,185,74,.05);}
+.script-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+.script-pill{font-family:'Barlow',sans-serif;font-size:11px;letter-spacing:1px;border:1px solid rgba(124,255,107,.4);color:var(--green);border-radius:999px;padding:5px 10px;font-weight:700;text-transform:uppercase;}
+.bubble{border-radius:18px;padding:16px 18px;margin-bottom:12px;font-size:16.5px;line-height:1.5;}
+.bubble:last-child{margin-bottom:0;}
+.bubble.host{background:var(--host-soft);border:1px solid var(--host-border);}
+.bubble.bori{background:var(--accent-soft);border:1px solid var(--accent-border);margin-left:24px;}
+.bubble strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;font-weight:800;}
+.bubble.host strong{color:var(--host)}
+.bubble.bori strong{color:var(--accent)}
 
-  .hint { color: var(--muted); font-size: 13px; margin: 8px 2px 0; }
-  .err { color: #ff6b6b; font-size: 13px; margin: 8px 2px 0; }
+/* ---------------- REFLECT: the question ---------------- */
+.question-block{margin:0 auto;padding:42px 32px;background:radial-gradient(circle at 50% 0%, rgba(232,185,74,.18), transparent 70%),linear-gradient(180deg,#1a1408,#101018);border:1px solid var(--accent-border);border-radius:28px;text-align:center;position:relative;overflow:hidden;}
+.question-block::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:2px;background:linear-gradient(90deg, transparent, var(--accent), transparent);}
+.question-label{display:inline-block;font-family:'Barlow Condensed',sans-serif;color:var(--accent);font-weight:900;letter-spacing:4px;font-size:12px;text-transform:uppercase;margin-bottom:18px;padding:6px 14px;border:1px solid var(--accent-border);border-radius:999px;background:var(--accent-soft);}
+.question-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,5vw,52px);line-height:1.05;font-weight:900;text-transform:uppercase;text-shadow:0 2px 30px var(--accent-glow);}
+.question-text span{color:var(--accent)}
 
-  .cta-row {
-    margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 12px; align-items: flex-start;
-  }
-  .cta-row h3 { margin: 0; font-size: 20px; font-weight: 700; }
-  .cta-row p { margin: 0; color: var(--muted); font-size: 15px; }
-  .cta-row a.btn {
-    display: inline-block; padding: 12px 20px; background: var(--text); color: var(--bg);
-    border-radius: 999px; font-weight: 700; font-size: 14px; letter-spacing: 0.3px;
-  }
-  .cta-row a.btn:hover { text-decoration: none; opacity: 0.9; }
+/* ---------------- TALK: the chat ---------------- */
+.chat-shell{background:linear-gradient(180deg,#151520,#0f0f17);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:24px;}
+.chat{padding:0 4px;min-height:120px;}
+.msg{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.msg:last-child{border-bottom:none;}
+.msg-who{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.msg.bori .msg-who{color:var(--accent)}
+.msg.player .msg-who{color:var(--white);opacity:.55}
+.msg-text{font-size:16px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;color:var(--white);}
+.msg-text.streaming::after{content:"▍";display:inline-block;margin-left:2px;color:var(--accent);animation:blink 1s steps(2,start) infinite;}
+@keyframes blink{to{visibility:hidden;}}
 
-  footer.foot {
-    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border);
-    color: var(--muted); font-size: 13px;
-  }
-  footer.foot p { margin: 0 0 8px; }
+.composer{display:flex;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);}
+.composer textarea{flex:1;resize:none;min-height:54px;max-height:160px;background:#0a0a10;color:var(--white);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;font-family:'Barlow',sans-serif;font-size:15.5px;line-height:1.45;outline:none;transition:border-color .2s ease;}
+.composer textarea::placeholder{color:var(--muted);opacity:.7}
+.composer textarea:focus{border-color:var(--accent-border)}
+.composer button{background:var(--accent);color:#111;border:0;border-radius:14px;padding:0 24px;font-family:'Barlow',sans-serif;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:transform .2s ease, box-shadow .2s ease;}
+.composer button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(232,185,74,.22)}
+.composer button:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
 
-  @media (max-width: 540px) {
-    h1 { font-size: 30px; }
-    .question { font-size: 22px; }
-    .line, .msg { grid-template-columns: 56px 1fr; gap: 10px; }
-    .who { font-size: 11px; }
-  }
+.hint{color:var(--muted);font-size:12.5px;letter-spacing:.5px;margin-top:14px;text-align:center;opacity:.7;}
+.err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;display:none;}
+.err.visible{display:block;}
+
+/* ---------------- FOOTER CTA ---------------- */
+.episode-footer{padding:80px 7% 60px;text-align:center;background:radial-gradient(circle at center, rgba(232,185,74,.10), transparent 50%),#08080d;border-top:1px solid rgba(255,255,255,.05);}
+.episode-footer h3{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,56px);text-transform:uppercase;line-height:.95;margin-bottom:14px;}
+.episode-footer h3 span{color:var(--accent)}
+.episode-footer p{color:var(--muted);font-size:17px;line-height:1.5;max-width:560px;margin:0 auto 28px;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font-family:'Barlow',sans-serif;font-weight:800;letter-spacing:1px;text-transform:uppercase;font-size:14px;transition:.2s ease;cursor:pointer;border:none;}
+.btn.outline{border:1px solid rgba(255,255,255,.26);color:var(--white);background:transparent;}
+.btn.outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+
+.disclaimer{padding:30px 7% 40px;text-align:center;color:#858585;font-size:12.5px;background:#050508;border-top:1px solid rgba(255,255,255,.05);line-height:1.6;}
+
+@media(max-width:780px){
+  section{padding:48px 6%;}
+  .episode-hero{padding:120px 6% 40px;}
+  .episode-footer{padding:60px 6% 50px;}
+  .bubble.bori{margin-left:0;}
+  .step-strip{max-width:100%;}
+  .step-pill{font-size:11px;letter-spacing:1px;padding:8px 6px;}
+  .composer{flex-direction:column;}
+  .composer button{padding:14px 20px;}
+  .question-block{padding:32px 22px;}
+}
 </style>
 </head>
+
 <body>
-<div class="wrap">
 
-  <header class="top">
-    <div class="brand"><a href="/">Get Ready Hoops</a></div>
-    <div class="lang" role="group" aria-label="Language">
-      <button id="lang-en" class="active" type="button">EN</button>
-      <button id="lang-es" type="button">ES</button>
-    </div>
-  </header>
-
-  <div class="badge" data-i18n="badge">Episode 001 · Free Preview</div>
-  <h1 data-i18n="title">Basketball Money</h1>
-  <p class="sub" data-i18n="sub">Why players get opportunities — and why talent alone is not enough.</p>
-
-  <!-- STEP 1: LISTEN -->
-  <div class="step-label" data-i18n="step1">Step 1 — Listen</div>
-  <div class="script" id="script"></div>
-
-  <!-- STEP 2: REFLECT -->
-  <div class="step-label" data-i18n="step2">Step 2 — Reflect</div>
-  <div class="question-block">
-    <div class="question-label" data-i18n="qLabel">The Question</div>
-    <p class="question" id="question" data-i18n="question">Why would someone choose you?</p>
-  </div>
-
-  <!-- STEP 3: TALK -->
-  <div class="step-label" data-i18n="step3">Step 3 — Talk With Bori</div>
-  <div class="chat" id="chat" aria-live="polite">
-    <div class="msg bori">
-      <div class="who">Bori</div>
-      <div class="said" data-i18n="boriOpener">Take your time. There's no right answer here. Just be real with me — why would someone choose you?</div>
+<nav class="nav">
+  <div class="nav-top">
+    <a href="/" class="nav-logo">Get Ready <span>Hoops</span></a>
+    <div class="lang-toggle">
+      <button type="button" class="lang-btn active" data-lang="en">EN</button>
+      <span class="lang-sep">|</span>
+      <button type="button" class="lang-btn" data-lang="es">ES</button>
     </div>
   </div>
-  <div class="composer">
-    <textarea id="input" rows="2" data-i18n-ph="placeholder" placeholder="Type your answer to Bori…"></textarea>
-    <button id="send" type="button" data-i18n="send">Send</button>
+</nav>
+
+<header class="episode-hero">
+  <div class="episode-hero-inner">
+    <a href="/" class="back-link" data-en="Back To Series" data-es="Volver A La Serie">Back To Series</a>
+
+    <div class="eyebrow">
+      <span class="live-dot"></span>
+      <span data-en="Episode Is Live" data-es="Episodio En Vivo">Episode Is Live</span>
+    </div>
+
+    <div class="episode-num" data-en="Episode 001 · Level 1: Awareness" data-es="Episodio 001 · Nivel 1: Conciencia">Episode 001 · Level 1: Awareness</div>
+    <h1 class="episode-title" data-en="Basketball Money" data-es="El Dinero Del Baloncesto">Basketball Money</h1>
+    <p class="episode-sub" data-en="Why players get opportunities — and why talent alone is not enough." data-es="Por qué los jugadores reciben oportunidades — y por qué el talento solo no es suficiente.">
+      Why players get opportunities — and why talent alone is not enough.
+    </p>
   </div>
-  <div class="hint" id="hint" data-i18n="hint">Free preview. Refresh resets the conversation.</div>
-  <div class="err" id="err" style="display:none"></div>
+</header>
 
-  <div class="cta-row">
-    <h3 data-i18n="ctaTitle">That's Episode 001.</h3>
-    <p data-i18n="ctaBody">There are 29 more. Each one ends with a question you can't ignore.</p>
-    <a class="btn" href="/" data-i18n="ctaBtn">See All Episodes</a>
+<!-- STEP STRIP -->
+<div style="padding:0 7%;">
+  <div class="step-strip">
+    <div class="step-pill current" data-en="1. Listen" data-es="1. Escucha">1. Listen</div>
+    <div class="step-pill" data-en="2. Reflect" data-es="2. Reflexiona">2. Reflect</div>
+    <div class="step-pill" data-en="3. Talk" data-es="3. Habla">3. Talk</div>
   </div>
-
-  <footer class="foot">
-    <p data-i18n="disc">Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.</p>
-    <p>© 2026 Get Ready Hoops</p>
-  </footer>
-
 </div>
 
+<!-- STEP 1: LISTEN -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 1 — Listen" data-es="Paso 1 — Escucha">Step 1 — Listen</div>
+    <h2 class="section-h" data-en="Skill Gets You Noticed.<br><span>Value Gets You Chosen.</span>" data-es="La Habilidad Te Hace Notar.<br><span>El Valor Te Hace Elegir.</span>">Skill Gets You Noticed.<br><span>Value Gets You Chosen.</span></h2>
+
+    <div class="script" id="script">
+      <div class="script-header">
+        <span data-en="Live Chatcast" data-es="Chatcast En Vivo">Live Chatcast</span>
+        <span class="script-pill" data-en="Interactive" data-es="Interactivo">Interactive</span>
+      </div>
+      <div id="script-bubbles"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2: REFLECT -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 2 — Reflect" data-es="Paso 2 — Reflexiona">Step 2 — Reflect</div>
+    <div class="question-block">
+      <div class="question-label" data-en="The Question" data-es="La Pregunta">The Question</div>
+      <p class="question-text" data-en="Why would someone choose <span>YOU</span>?" data-es="¿Por qué alguien te elegiría a <span>TI</span>?">Why would someone choose <span>YOU</span>?</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3: TALK -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 3 — Talk With Bori" data-es="Paso 3 — Habla Con Bori">Step 3 — Talk With Bori</div>
+
+    <div class="chat-shell">
+      <div class="chat" id="chat" aria-live="polite">
+        <div class="msg bori">
+          <span class="msg-who">Bori</span>
+          <span class="msg-text" data-en="Take your time. There's no right answer. Just be real with me — why would someone choose you?" data-es="Tómate tu tiempo. No hay respuesta correcta. Solo sé real conmigo — ¿por qué alguien te elegiría a ti?">Take your time. There's no right answer. Just be real with me — why would someone choose you?</span>
+        </div>
+      </div>
+      <div class="composer">
+        <textarea id="input" rows="2" data-en-ph="Type your answer to Bori…" data-es-ph="Escribe tu respuesta a Bori…" placeholder="Type your answer to Bori…"></textarea>
+        <button id="send" type="button" data-en="Send" data-es="Enviar">Send</button>
+      </div>
+      <div class="hint" data-en="Free preview. Refresh resets the conversation." data-es="Vista previa gratis. Recargar reinicia la conversación.">Free preview. Refresh resets the conversation.</div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="episode-footer">
+  <h3 data-en="That's Episode 001.<br><span>29 More To Go.</span>" data-es="Ese Fue El Episodio 001.<br><span>Quedan 29 Más.</span>">That's Episode 001.<br><span>29 More To Go.</span></h3>
+  <p data-en="Each one ends with a question you can't ignore." data-es="Cada uno termina con una pregunta que no puedes ignorar.">Each one ends with a question you can't ignore.</p>
+  <a class="btn outline" href="/#episodes" data-en="See All Episodes" data-es="Ver Todos Los Episodios">See All Episodes</a>
+</section>
+
+<footer class="disclaimer">
+  <div data-en="Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor." data-es="Get Ready Hoops ofrece contenido educativo solamente. No damos consejos legales, financieros, de contratos, representación o reclutamiento. Para tu situación específica, trabaja con un abogado deportivo, CPA o asesor certificado.">
+    Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.
+  </div>
+  <div style="margin-top:10px;opacity:.6">© 2026 Get Ready Hoops</div>
+</footer>
+
 <script>
-  // ---------- i18n ----------
-  const STR = {
-    en: {
-      badge: "Episode 001 · Free Preview",
-      title: "Basketball Money",
-      sub: "Why players get opportunities — and why talent alone is not enough.",
-      step1: "Step 1 — Listen",
-      step2: "Step 2 — Reflect",
-      step3: "Step 3 — Talk With Bori",
-      qLabel: "The Question",
-      question: "Why would someone choose you?",
-      boriOpener: "Take your time. There's no right answer here. Just be real with me — why would someone choose you?",
-      placeholder: "Type your answer to Bori…",
-      send: "Send",
-      hint: "Free preview. Refresh resets the conversation.",
-      ctaTitle: "That's Episode 001.",
-      ctaBody: "There are 29 more. Each one ends with a question you can't ignore.",
-      ctaBtn: "See All Episodes",
-      disc: "Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.",
-      errGeneric: "Something went wrong. Try again in a moment.",
-      errRate: "You're going a bit fast. Wait a moment and try again.",
-      youLabel: "You",
-      script: [
-        { who: "Host Bot", role: "host", said: "Why does everybody talk about basketball money, but nobody explains how it really works?" },
-        { who: "Bori", role: "bori", said: "Because most players see the results, not the system. They see the contract, the deal, the shoes. They don't see the years of choices that made someone worth choosing." },
-        { who: "Host Bot", role: "host", said: "So talent is not enough?" },
-        { who: "Bori", role: "bori", said: "Talent gets you in the room. It does not keep you there. There are thousands of talented players. Coaches, teams, programs, sponsors — they don't pick the most talented. They pick the most trusted." },
-        { who: "Host Bot", role: "host", said: "What's the difference between skill and value?" },
-        { who: "Bori", role: "bori", said: "Skill is what you can do. Value is what you bring. Skill is your jumper. Value is showing up early, being coachable, making teammates better, handling pressure without breaking. Skill gets you noticed. Value gets you chosen." },
-        { who: "Host Bot", role: "host", said: "So what should a player ask first?" },
-        { who: "Bori", role: "bori", said: "Simple. Why would someone choose YOU?" }
-      ]
-    },
-    es: {
-      badge: "Episodio 001 · Vista Previa Gratis",
-      title: "Basketball Money",
-      sub: "Por qué los jugadores reciben oportunidades — y por qué el talento solo no es suficiente.",
-      step1: "Paso 1 — Escucha",
-      step2: "Paso 2 — Reflexiona",
-      step3: "Paso 3 — Habla Con Bori",
-      qLabel: "La Pregunta",
-      question: "¿Por qué alguien te elegiría a ti?",
-      boriOpener: "Tómate tu tiempo. No hay respuesta correcta. Solo sé real conmigo — ¿por qué alguien te elegiría a ti?",
-      placeholder: "Escribe tu respuesta a Bori…",
-      send: "Enviar",
-      hint: "Vista previa gratis. Recargar reinicia la conversación.",
-      ctaTitle: "Ese fue el Episodio 001.",
-      ctaBody: "Quedan 29 más. Cada uno termina con una pregunta que no puedes ignorar.",
-      ctaBtn: "Ver Todos los Episodios",
-      disc: "Get Ready Hoops ofrece contenido educativo únicamente. No brindamos asesoría legal, financiera, contractual, de representación ni de reclutamiento. Para tu situación específica, trabaja con un abogado deportivo, CPA o asesor certificado.",
-      errGeneric: "Algo salió mal. Intenta de nuevo en un momento.",
-      errRate: "Vas un poco rápido. Espera un momento e intenta de nuevo.",
-      youLabel: "Tú",
-      script: [
-        { who: "Host Bot", role: "host", said: "¿Por qué todo el mundo habla del basketball money, pero nadie explica cómo funciona de verdad?" },
-        { who: "Bori", role: "bori", said: "Porque la mayoría de los jugadores ve los resultados, no el sistema. Ven el contrato, el deal, los tenis. No ven los años de decisiones que hicieron a alguien digno de ser elegido." },
-        { who: "Host Bot", role: "host", said: "¿Entonces el talento no es suficiente?" },
-        { who: "Bori", role: "bori", said: "El talento te mete al cuarto. No te mantiene ahí. Hay miles de jugadores talentosos. Coaches, equipos, programas, marcas — no eligen al más talentoso. Eligen al más confiable." },
-        { who: "Host Bot", role: "host", said: "¿Cuál es la diferencia entre habilidad y valor?" },
-        { who: "Bori", role: "bori", said: "La habilidad es lo que puedes hacer. El valor es lo que aportas. La habilidad es tu tiro. El valor es llegar temprano, ser coachable, hacer mejores a tus compañeros, manejar la presión sin romperte. La habilidad te hace notar. El valor te hace elegir." },
-        { who: "Host Bot", role: "host", said: "¿Entonces qué debería preguntarse primero un jugador?" },
-        { who: "Bori", role: "bori", said: "Simple. ¿Por qué alguien te elegiría a TI?" }
-      ]
+// ============================================================
+// EPISODE CONFIG
+// ============================================================
+const EPISODE_ID = '001';
+
+// ============================================================
+// SCRIPTED OPENER (per-episode content)
+// ============================================================
+const SCRIPT = {
+  en: [
+    { who: 'Host Bot', role: 'host', said: "Why does everybody talk about basketball money, but nobody explains how it really works?" },
+    { who: 'Bori', role: 'bori', said: "Because most players see the results, not the system. They see the contract, the deal, the shoes. They don't see the years of choices that made someone worth choosing." },
+    { who: 'Host Bot', role: 'host', said: "So talent is not enough?" },
+    { who: 'Bori', role: 'bori', said: "Talent gets you in the room. It does not keep you there. There are thousands of talented players. Coaches, teams, programs, sponsors — they don't pick the most talented. They pick the most trusted." },
+    { who: 'Host Bot', role: 'host', said: "What's the difference between skill and value?" },
+    { who: 'Bori', role: 'bori', said: "Skill is what you can do. Value is what you bring. Skill is your jumper. Value is showing up early, being coachable, making teammates better, handling pressure without breaking. Skill gets you noticed. Value gets you chosen." },
+    { who: 'Host Bot', role: 'host', said: "So what should a player ask first?" },
+    { who: 'Bori', role: 'bori', said: "Simple. Why would someone choose YOU?" }
+  ],
+  es: [
+    { who: 'Host Bot', role: 'host', said: "¿Por qué todo el mundo habla del basketball money, pero nadie explica cómo funciona de verdad?" },
+    { who: 'Bori', role: 'bori', said: "Porque la mayoría de los jugadores ve los resultados, no el sistema. Ven el contrato, el deal, los tenis. No ven los años de decisiones que hicieron a alguien digno de ser elegido." },
+    { who: 'Host Bot', role: 'host', said: "¿Entonces el talento no es suficiente?" },
+    { who: 'Bori', role: 'bori', said: "El talento te mete al cuarto. No te mantiene ahí. Hay miles de jugadores talentosos. Coaches, equipos, programas, marcas — no eligen al más talentoso. Eligen al más confiable." },
+    { who: 'Host Bot', role: 'host', said: "¿Cuál es la diferencia entre habilidad y valor?" },
+    { who: 'Bori', role: 'bori', said: "La habilidad es lo que puedes hacer. El valor es lo que aportas. La habilidad es tu tiro. El valor es llegar temprano, ser coachable, hacer mejores a tus compañeros, manejar la presión sin romperte. La habilidad te hace notar. El valor te hace elegir." },
+    { who: 'Host Bot', role: 'host', said: "¿Entonces qué debería preguntarse primero un jugador?" },
+    { who: 'Bori', role: 'bori', said: "Simple. ¿Por qué alguien te elegiría a TI?" }
+  ]
+};
+
+const UI = {
+  en: { you: 'You', thinking: 'Thinking…', errGeneric: 'Something went wrong. Try again in a moment.', errRate: "You're going a bit fast. Wait a moment and try again." },
+  es: { you: 'Tú', thinking: 'Pensando…', errGeneric: 'Algo salió mal. Intenta de nuevo en un momento.', errRate: 'Vas un poco rápido. Espera un momento e intenta de nuevo.' }
+};
+
+// ============================================================
+// LANGUAGE
+// ============================================================
+let lang = 'en';
+const langButtons = document.querySelectorAll('.lang-btn');
+const translatable = document.querySelectorAll('[data-en][data-es]');
+
+function renderScript() {
+  const wrap = document.getElementById('script-bubbles');
+  wrap.innerHTML = '';
+  SCRIPT[lang].forEach(line => {
+    const div = document.createElement('div');
+    div.className = `bubble ${line.role}`;
+    const strong = document.createElement('strong');
+    strong.textContent = line.who;
+    const span = document.createElement('span');
+    span.textContent = line.said;
+    div.appendChild(strong);
+    div.appendChild(span);
+    wrap.appendChild(div);
+  });
+}
+
+function setLanguage(l) {
+  lang = l;
+  translatable.forEach(el => {
+    const text = el.getAttribute('data-' + l);
+    if (text) el.innerHTML = text;
+  });
+  document.querySelectorAll('[data-en-ph][data-es-ph]').forEach(el => {
+    const ph = el.getAttribute('data-' + l + '-ph');
+    if (ph) el.setAttribute('placeholder', ph);
+  });
+  langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === l));
+  document.documentElement.lang = l;
+  renderScript();
+  try { localStorage.setItem('grhLang', l); } catch (e) {}
+}
+
+langButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+let savedLang = 'en';
+try { savedLang = localStorage.getItem('grhLang') || 'en'; } catch (e) {}
+setLanguage(savedLang);
+
+// ============================================================
+// STEP STRIP — highlight current step based on scroll position
+// ============================================================
+const stepPills = document.querySelectorAll('.step-pill');
+const sections = document.querySelectorAll('section');
+function updateStepStrip() {
+  const scrollY = window.scrollY + window.innerHeight * 0.35;
+  let active = 0;
+  // sections[0]=Listen, sections[1]=Reflect, sections[2]=Talk, sections[3]=Footer CTA
+  for (let i = 0; i < 3; i++) {
+    if (sections[i] && sections[i].offsetTop <= scrollY) active = i;
+  }
+  stepPills.forEach((p, i) => p.classList.toggle('current', i === active));
+}
+window.addEventListener('scroll', updateStepStrip, { passive: true });
+window.addEventListener('load', updateStepStrip);
+
+// ============================================================
+// CHAT WITH BORI — streaming
+// ============================================================
+const history = [];
+const chatEl = document.getElementById('chat');
+const inputEl = document.getElementById('input');
+const sendEl = document.getElementById('send');
+const errEl = document.getElementById('err');
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const who = document.createElement('span');
+  who.className = 'msg-who';
+  who.textContent = role === 'bori' ? 'Bori' : UI[lang].you;
+  const txt = document.createElement('span');
+  txt.className = 'msg-text';
+  txt.textContent = text;
+  div.appendChild(who);
+  div.appendChild(txt);
+  chatEl.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  return div;
+}
+
+function showError(msg) { errEl.textContent = msg; errEl.classList.add('visible'); }
+function clearError() { errEl.textContent = ''; errEl.classList.remove('visible'); }
+
+async function send() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+  clearError();
+
+  addMessage('player', text);
+  history.push({ role: 'user', content: text });
+  inputEl.value = '';
+  sendEl.disabled = true;
+
+  const boriNode = addMessage('bori', '');
+  const txtEl = boriNode.querySelector('.msg-text');
+  txtEl.classList.add('streaming');
+
+  let accumulated = '';
+  let gotAnyText = false;
+
+  try {
+    const res = await fetch('/api/episode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ episode: EPISODE_ID, messages: history })
+    });
+
+    if (!res.ok || !res.body) {
+      txtEl.classList.remove('streaming');
+      boriNode.remove();
+      showError(res.status === 429 ? UI[lang].errRate : UI[lang].errGeneric);
+      sendEl.disabled = false;
+      return;
     }
-  };
 
-  let lang = "en";
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
 
-  function renderScript() {
-    const wrap = document.getElementById("script");
-    wrap.innerHTML = "";
-    STR[lang].script.forEach(line => {
-      const row = document.createElement("div");
-      row.className = "line";
-      row.innerHTML = `<div class="who ${line.role}"></div><div class="said"></div>`;
-      row.querySelector(".who").textContent = line.who;
-      row.querySelector(".said").textContent = line.said;
-      wrap.appendChild(row);
-    });
-  }
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const events = buffer.split('\n\n');
+      buffer = events.pop();
 
-  function applyLang() {
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      if (STR[lang][key]) el.textContent = STR[lang][key];
-    });
-    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
-      const key = el.getAttribute("data-i18n-ph");
-      if (STR[lang][key]) el.setAttribute("placeholder", STR[lang][key]);
-    });
-    document.getElementById("lang-en").classList.toggle("active", lang === "en");
-    document.getElementById("lang-es").classList.toggle("active", lang === "es");
-    renderScript();
-  }
-
-  document.getElementById("lang-en").addEventListener("click", () => { lang = "en"; applyLang(); });
-  document.getElementById("lang-es").addEventListener("click", () => { lang = "es"; applyLang(); });
-
-  // ---------- streaming chat with Bori ----------
-  const history = [];
-  const chatEl = document.getElementById("chat");
-  const inputEl = document.getElementById("input");
-  const sendEl = document.getElementById("send");
-  const errEl = document.getElementById("err");
-
-  function addMessage(role, text) {
-    const div = document.createElement("div");
-    div.className = `msg ${role}`;
-    const who = role === "bori" ? "Bori" : STR[lang].youLabel;
-    div.innerHTML = `<div class="who"></div><div class="said"></div>`;
-    div.querySelector(".who").textContent = who;
-    div.querySelector(".said").textContent = text;
-    chatEl.appendChild(div);
-    chatEl.scrollTop = chatEl.scrollHeight;
-    return div;
-  }
-
-  function showError(msg) {
-    errEl.textContent = msg;
-    errEl.style.display = "block";
-  }
-  function clearError() {
-    errEl.style.display = "none";
-    errEl.textContent = "";
-  }
-
-  async function send() {
-    const text = inputEl.value.trim();
-    if (!text) return;
-    clearError();
-
-    addMessage("player", text);
-    history.push({ role: "user", content: text });
-    inputEl.value = "";
-    sendEl.disabled = true;
-
-    // Create empty Bori bubble with streaming cursor
-    const boriNode = addMessage("bori", "");
-    const saidEl = boriNode.querySelector(".said");
-    saidEl.classList.add("streaming");
-
-    let accumulated = "";
-    let gotAnyText = false;
-    let hadError = false;
-
-    try {
-      const res = await fetch("/api/episode-001", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history })
-      });
-
-      // Handle non-stream errors (rate limit, server error, etc.)
-      if (!res.ok || !res.body) {
-        saidEl.classList.remove("streaming");
-        boriNode.remove();
-        if (res.status === 429) showError(STR[lang].errRate);
-        else showError(STR[lang].errGeneric);
-        sendEl.disabled = false;
-        return;
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        // Parse SSE events (separated by blank lines)
-        const events = buffer.split("\n\n");
-        buffer = events.pop();
-
-        for (const evt of events) {
-          for (const line of evt.split("\n")) {
-            if (!line.startsWith("data:")) continue;
-            const data = line.slice(5).trim();
-            if (!data) continue;
-
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.type === "text") {
-                accumulated += parsed.text;
-                saidEl.textContent = accumulated;
-                gotAnyText = true;
-                chatEl.scrollTop = chatEl.scrollHeight;
-              } else if (parsed.type === "error") {
-                hadError = true;
-              }
-              // "done" handled implicitly when stream closes
-            } catch {
-              // ignore
+      for (const evt of events) {
+        for (const line of evt.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (!data) continue;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'text') {
+              accumulated += parsed.text;
+              txtEl.textContent = accumulated;
+              gotAnyText = true;
+              boriNode.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
-          }
+          } catch {}
         }
       }
-    } catch {
-      hadError = true;
     }
-
-    saidEl.classList.remove("streaming");
-
-    if (!gotAnyText) {
-      boriNode.remove();
-      showError(STR[lang].errGeneric);
-    } else {
-      history.push({ role: "assistant", content: accumulated });
-      if (hadError) {
-        // partial reply came through but stream errored — leave the message, no extra error UI
-      }
-    }
-
-    sendEl.disabled = false;
-    inputEl.focus();
+  } catch {
+    // fall through; handled below
   }
 
-  sendEl.addEventListener("click", send);
-  inputEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
-  });
+  txtEl.classList.remove('streaming');
 
-  applyLang();
+  if (!gotAnyText) {
+    boriNode.remove();
+    showError(UI[lang].errGeneric);
+  } else {
+    history.push({ role: 'assistant', content: accumulated });
+  }
+
+  sendEl.disabled = false;
+  inputEl.focus();
+}
+
+sendEl.addEventListener('click', send);
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
 </script>
 
 </body>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Episode 003: Influence — Get Ready Hoops</title>
+<meta name="description" content="The people around a player shape their decisions more than they realize. Episode 003 of Get Ready Hoops with Bori." />
+<meta property="og:title" content="Episode 003: Influence — Get Ready Hoops" />
+<meta property="og:description" content="You don't become who you admire. You become who you're around. Who is really influencing you?" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://getreadyhoops.com/episode-003.html" />
+<meta property="og:image" content="https://getreadyhoops.com/ready.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --black:#07070b;
+  --dark:#101018;
+  --panel:#171722;
+  --panel2:#202033;
+  --white:#f4f1e8;
+  --muted:#b9b4a8;
+  --green:#7cff6b;
+  --blue:#48c6ff;
+  --red:#ff4f6d;
+  --purple:#b66cff;
+  --orange:#ff9f43;
+
+  /* ====== EPISODE ACCENT — change this one variable per episode ====== */
+  /* Episode 003: Influence — Level 1: Awareness — Deeper Gold */
+  --accent:#d9a440;
+  --accent-soft:rgba(217,164,64,.13);
+  --accent-border:rgba(217,164,64,.25);
+  --accent-glow:rgba(217,164,64,.4);
+  /* =================================================================== */
+
+  --host:var(--blue);
+  --host-soft:rgba(72,198,255,.12);
+  --host-border:rgba(72,198,255,.22);
+  --player:var(--white);
+  --player-soft:rgba(244,241,232,.06);
+  --player-border:rgba(244,241,232,.14);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
+  line-height:1.55;
+}
+a{text-decoration:none;color:inherit}
+
+/* ---------------- NAV ---------------- */
+.nav{position:fixed;top:0;left:0;width:100%;z-index:50;padding:16px 7% 12px;background:rgba(7,7,11,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08);}
+.nav-top{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:2px;font-size:22px;color:var(--white);text-transform:uppercase;}
+.nav-logo span{color:var(--accent)}
+.lang-toggle{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:13px;letter-spacing:1px;text-transform:uppercase;}
+.lang-btn{background:transparent;border:none;color:var(--muted);font-family:'Barlow',sans-serif;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:4px 6px;font-size:13px;}
+.lang-btn.active,.lang-btn:hover{color:var(--accent)}
+.lang-sep{color:var(--muted);opacity:.4}
+
+/* ---------------- HEADER (episode hero) ---------------- */
+.episode-hero{position:relative;padding:140px 7% 50px 7%;overflow:hidden;background:radial-gradient(circle at 30% 20%, rgba(217,164,64,.10), transparent 50%),linear-gradient(180deg,#09090e,#07070b);}
+.episode-hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:42px 42px;opacity:.25;pointer-events:none;}
+.episode-hero-inner{position:relative;z-index:2;max-width:880px;margin:0 auto;}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--accent-border);color:var(--accent);border-radius:999px;text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:800;margin-bottom:24px;background:var(--accent-soft);}
+.eyebrow .live-dot{width:8px;height:8px;border-radius:50%;background:#cc0030;box-shadow:0 0 10px #ff3a5e;animation:livePulse 1.6s ease-in-out infinite;}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
+.episode-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:3px;font-size:14px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
+h1.episode-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,9vw,104px);line-height:.9;font-weight:900;text-transform:uppercase;margin-bottom:18px;text-shadow:0 4px 30px rgba(0,0,0,.55);}
+.episode-sub{color:var(--muted);font-size:clamp(17px,2.2vw,21px);max-width:680px;line-height:1.5;}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:32px;transition:color .2s ease;}
+.back-link:hover{color:var(--accent)}
+.back-link::before{content:"←";display:inline-block;transition:transform .2s ease;}
+.back-link:hover::before{transform:translateX(-3px);}
+
+/* ---------------- STEP STRIP ---------------- */
+.step-strip{display:flex;gap:0;justify-content:center;margin:0 auto 30px;max-width:600px;border:1px solid rgba(255,255,255,.06);border-radius:999px;padding:6px;background:var(--dark);}
+.step-pill{flex:1;text-align:center;padding:8px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-radius:999px;}
+.step-pill.current{background:var(--accent);color:#111;}
+
+/* ---------------- SECTIONS ---------------- */
+section{padding:60px 7%;}
+.section-inner{max-width:880px;margin:0 auto;}
+.section-label{font-family:'Barlow Condensed',sans-serif;color:var(--accent);font-weight:900;letter-spacing:3px;font-size:13px;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:10px;}
+.section-label::before{content:"";width:32px;height:2px;background:var(--accent);}
+h2.section-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,5.5vw,56px);line-height:.95;font-weight:900;text-transform:uppercase;margin-bottom:28px;}
+h2.section-h span{color:var(--accent)}
+
+/* ---------------- LISTEN: scripted bubbles ---------------- */
+.script{background:linear-gradient(180deg,#151520,#0f0f17);border:1px solid var(--accent-border);border-radius:28px;padding:28px;box-shadow:0 0 70px rgba(217,164,64,.05);}
+.script-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+.script-pill{font-family:'Barlow',sans-serif;font-size:11px;letter-spacing:1px;border:1px solid rgba(124,255,107,.4);color:var(--green);border-radius:999px;padding:5px 10px;font-weight:700;text-transform:uppercase;}
+.bubble{border-radius:18px;padding:16px 18px;margin-bottom:12px;font-size:16.5px;line-height:1.5;}
+.bubble:last-child{margin-bottom:0;}
+.bubble.host{background:var(--host-soft);border:1px solid var(--host-border);}
+.bubble.bori{background:var(--accent-soft);border:1px solid var(--accent-border);margin-left:24px;}
+.bubble strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;font-weight:800;}
+.bubble.host strong{color:var(--host)}
+.bubble.bori strong{color:var(--accent)}
+
+/* ---------------- REFLECT: the question ---------------- */
+.question-block{margin:0 auto;padding:42px 32px;background:radial-gradient(circle at 50% 0%, rgba(217,164,64,.18), transparent 70%),linear-gradient(180deg,#1a1408,#101018);border:1px solid var(--accent-border);border-radius:28px;text-align:center;position:relative;overflow:hidden;}
+.question-block::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:2px;background:linear-gradient(90deg, transparent, var(--accent), transparent);}
+.question-label{display:inline-block;font-family:'Barlow Condensed',sans-serif;color:var(--accent);font-weight:900;letter-spacing:4px;font-size:12px;text-transform:uppercase;margin-bottom:18px;padding:6px 14px;border:1px solid var(--accent-border);border-radius:999px;background:var(--accent-soft);}
+.question-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,5vw,52px);line-height:1.05;font-weight:900;text-transform:uppercase;text-shadow:0 2px 30px var(--accent-glow);}
+.question-text span{color:var(--accent)}
+
+/* ---------------- TALK: the chat ---------------- */
+.chat-shell{background:linear-gradient(180deg,#151520,#0f0f17);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:24px;}
+.chat{padding:0 4px;min-height:120px;}
+.msg{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.msg:last-child{border-bottom:none;}
+.msg-who{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.msg.bori .msg-who{color:var(--accent)}
+.msg.player .msg-who{color:var(--white);opacity:.55}
+.msg-text{font-size:16px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;color:var(--white);}
+.msg-text.streaming::after{content:"▍";display:inline-block;margin-left:2px;color:var(--accent);animation:blink 1s steps(2,start) infinite;}
+@keyframes blink{to{visibility:hidden;}}
+
+.composer{display:flex;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);}
+.composer textarea{flex:1;resize:none;min-height:54px;max-height:160px;background:#0a0a10;color:var(--white);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;font-family:'Barlow',sans-serif;font-size:15.5px;line-height:1.45;outline:none;transition:border-color .2s ease;}
+.composer textarea::placeholder{color:var(--muted);opacity:.7}
+.composer textarea:focus{border-color:var(--accent-border)}
+.composer button{background:var(--accent);color:#111;border:0;border-radius:14px;padding:0 24px;font-family:'Barlow',sans-serif;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:transform .2s ease, box-shadow .2s ease;}
+.composer button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(217,164,64,.22)}
+.composer button:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+
+.hint{color:var(--muted);font-size:12.5px;letter-spacing:.5px;margin-top:14px;text-align:center;opacity:.7;}
+.err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;display:none;}
+.err.visible{display:block;}
+
+/* ---------------- FOOTER CTA ---------------- */
+.episode-footer{padding:80px 7% 60px;text-align:center;background:radial-gradient(circle at center, rgba(217,164,64,.10), transparent 50%),#08080d;border-top:1px solid rgba(255,255,255,.05);}
+.episode-footer h3{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,56px);text-transform:uppercase;line-height:.95;margin-bottom:14px;}
+.episode-footer h3 span{color:var(--accent)}
+.episode-footer p{color:var(--muted);font-size:17px;line-height:1.5;max-width:560px;margin:0 auto 28px;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font-family:'Barlow',sans-serif;font-weight:800;letter-spacing:1px;text-transform:uppercase;font-size:14px;transition:.2s ease;cursor:pointer;border:none;}
+.btn.outline{border:1px solid rgba(255,255,255,.26);color:var(--white);background:transparent;}
+.btn.outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+
+.disclaimer{padding:30px 7% 40px;text-align:center;color:#858585;font-size:12.5px;background:#050508;border-top:1px solid rgba(255,255,255,.05);line-height:1.6;}
+
+@media(max-width:780px){
+  section{padding:48px 6%;}
+  .episode-hero{padding:120px 6% 40px;}
+  .episode-footer{padding:60px 6% 50px;}
+  .bubble.bori{margin-left:0;}
+  .step-strip{max-width:100%;}
+  .step-pill{font-size:11px;letter-spacing:1px;padding:8px 6px;}
+  .composer{flex-direction:column;}
+  .composer button{padding:14px 20px;}
+  .question-block{padding:32px 22px;}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="nav-top">
+    <a href="/" class="nav-logo">Get Ready <span>Hoops</span></a>
+    <div class="lang-toggle">
+      <button type="button" class="lang-btn active" data-lang="en">EN</button>
+      <span class="lang-sep">|</span>
+      <button type="button" class="lang-btn" data-lang="es">ES</button>
+    </div>
+  </div>
+</nav>
+
+<header class="episode-hero">
+  <div class="episode-hero-inner">
+    <a href="/" class="back-link" data-en="Back To Series" data-es="Volver A La Serie">Back To Series</a>
+
+    <div class="eyebrow">
+      <span class="live-dot"></span>
+      <span data-en="Episode Is Live" data-es="Episodio En Vivo">Episode Is Live</span>
+    </div>
+
+    <div class="episode-num" data-en="Episode 003 · Level 1: Awareness" data-es="Episodio 003 · Nivel 1: Conciencia">Episode 003 · Level 1: Awareness</div>
+    <h1 class="episode-title" data-en="Influence" data-es="Influencia">Influence</h1>
+    <p class="episode-sub" data-en="The people around a player shape their decisions more than they realize." data-es="Las personas alrededor de un jugador moldean sus decisiones más de lo que piensan.">
+      The people around a player shape their decisions more than they realize.
+    </p>
+  </div>
+</header>
+
+<!-- STEP STRIP -->
+<div style="padding:0 7%;">
+  <div class="step-strip">
+    <div class="step-pill current" data-en="1. Listen" data-es="1. Escucha">1. Listen</div>
+    <div class="step-pill" data-en="2. Reflect" data-es="2. Reflexiona">2. Reflect</div>
+    <div class="step-pill" data-en="3. Talk" data-es="3. Habla">3. Talk</div>
+  </div>
+</div>
+
+<!-- STEP 1: LISTEN -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 1 — Listen" data-es="Paso 1 — Escucha">Step 1 — Listen</div>
+    <h2 class="section-h" data-en="You Don't Become Who You Admire.<br><span>You Become Who You're Around.</span>" data-es="No Te Conviertes En Quien Admiras.<br><span>Te Conviertes En Con Quién Estás.</span>">You Don't Become Who You Admire.<br><span>You Become Who You're Around.</span></h2>
+
+    <div class="script" id="script">
+      <div class="script-header">
+        <span data-en="Live Chatcast" data-es="Chatcast En Vivo">Live Chatcast</span>
+        <span class="script-pill" data-en="Interactive" data-es="Interactivo">Interactive</span>
+      </div>
+      <div id="script-bubbles"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2: REFLECT -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 2 — Reflect" data-es="Paso 2 — Reflexiona">Step 2 — Reflect</div>
+    <div class="question-block">
+      <div class="question-label" data-en="The Question" data-es="La Pregunta">The Question</div>
+      <p class="question-text" data-en="Who is really <span>influencing</span> you?" data-es="¿Quién realmente te está <span>influenciando</span>?">Who is really <span>influencing</span> you?</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3: TALK -->
+<section>
+  <div class="section-inner">
+    <div class="section-label" data-en="Step 3 — Talk With Bori" data-es="Paso 3 — Habla Con Bori">Step 3 — Talk With Bori</div>
+
+    <div class="chat-shell">
+      <div class="chat" id="chat" aria-live="polite">
+        <div class="msg bori">
+          <span class="msg-who">Bori</span>
+          <span class="msg-text" data-en="Take a second. Think about the last 7 days. Who did you spend the most time with — in person, in text, on the phone? Those are the names. So who is really influencing you?" data-es="Tómate un segundo. Piensa en los últimos 7 días. ¿Con quién pasaste más tiempo — en persona, en mensajes, por teléfono? Esos son los nombres. ¿Entonces quién realmente te está influenciando?">Take a second. Think about the last 7 days. Who did you spend the most time with — in person, in text, on the phone? Those are the names. So who is really influencing you?</span>
+        </div>
+      </div>
+      <div class="composer">
+        <textarea id="input" rows="2" data-en-ph="Type your answer to Bori…" data-es-ph="Escribe tu respuesta a Bori…" placeholder="Type your answer to Bori…"></textarea>
+        <button id="send" type="button" data-en="Send" data-es="Enviar">Send</button>
+      </div>
+      <div class="hint" data-en="Free preview. Refresh resets the conversation." data-es="Vista previa gratis. Recargar reinicia la conversación.">Free preview. Refresh resets the conversation.</div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="episode-footer">
+  <h3 data-en="That's Episode 003.<br><span>27 More To Go.</span>" data-es="Ese Fue El Episodio 003.<br><span>Quedan 27 Más.</span>">That's Episode 003.<br><span>27 More To Go.</span></h3>
+  <p data-en="Each one ends with a question you can't ignore." data-es="Cada uno termina con una pregunta que no puedes ignorar.">Each one ends with a question you can't ignore.</p>
+  <a class="btn outline" href="/#episodes" data-en="See All Episodes" data-es="Ver Todos Los Episodios">See All Episodes</a>
+</section>
+
+<footer class="disclaimer">
+  <div data-en="Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor." data-es="Get Ready Hoops ofrece contenido educativo solamente. No damos consejos legales, financieros, de contratos, representación o reclutamiento. Para tu situación específica, trabaja con un abogado deportivo, CPA o asesor certificado.">
+    Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.
+  </div>
+  <div style="margin-top:10px;opacity:.6">© 2026 Get Ready Hoops</div>
+</footer>
+
+<script>
+// ============================================================
+// EPISODE CONFIG
+// ============================================================
+const EPISODE_ID = '003';
+
+// ============================================================
+// SCRIPTED OPENER (per-episode content)
+// ============================================================
+const SCRIPT = {
+  en: [
+    { who: 'Host Bot', role: 'host', said: "Why do players think they pick their own influences when most of them never even check who\u2019s around them?" },
+    { who: 'Bori', role: 'bori', said: "Because they confuse admiration with influence. They think watching the highlights of a top player is what shapes them. It\u2019s not. What shapes them is who they\u2019re sitting next to at lunch." },
+    { who: 'Host Bot', role: 'host', said: "What\u2019s the difference?" },
+    { who: 'Bori', role: 'bori', said: "Admiration is a poster on the wall. Influence is a voice in your ear. The voice wins. The five people you spend the most hours with — their habits, their language, their standards — they install themselves into you. Slowly. Without permission." },
+    { who: 'Host Bot', role: 'host', said: "So you\u2019re saying friends matter more than role models?" },
+    { who: 'Bori', role: 'bori', said: "I\u2019m saying time matters. Whoever you spend time with is your role model, whether you call them that or not. A pro you watch on TV gets ten minutes of your week. The friend on your group chat gets ten hours. Math wins." },
+    { who: 'Host Bot', role: 'host', said: "What should a player look at first?" },
+    { who: 'Bori', role: 'bori', said: "Last seven days. Who did you actually spend time with? Don\u2019t tell me who you respect. Tell me who you were around." }
+  ],
+  es: [
+    { who: 'Host Bot', role: 'host', said: "\u00BFPor qu\u00E9 los jugadores creen que escogen sus propias influencias cuando la mayor\u00EDa ni siquiera revisa con qui\u00E9n est\u00E1n?" },
+    { who: 'Bori', role: 'bori', said: "Porque confunden la admiraci\u00F3n con la influencia. Creen que ver los highlights de un jugador top es lo que los moldea. No lo es. Lo que los moldea es con qui\u00E9n est\u00E1n sentados en el almuerzo." },
+    { who: 'Host Bot', role: 'host', said: "\u00BFCu\u00E1l es la diferencia?" },
+    { who: 'Bori', role: 'bori', said: "La admiraci\u00F3n es un poster en la pared. La influencia es una voz en tu o\u00EDdo. La voz gana. Las cinco personas con las que pasas m\u00E1s horas — sus h\u00E1bitos, su lenguaje, sus est\u00E1ndares — se instalan en ti. Lento. Sin permiso." },
+    { who: 'Host Bot', role: 'host', said: "\u00BFEntonces dices que los amigos importan m\u00E1s que los modelos a seguir?" },
+    { who: 'Bori', role: 'bori', said: "Digo que el tiempo importa. Con quien pasas tiempo es tu modelo, le llames as\u00ED o no. Un profesional que ves en TV recibe diez minutos de tu semana. El amigo en tu grupo de mensajes recibe diez horas. Las matem\u00E1ticas ganan." },
+    { who: 'Host Bot', role: 'host', said: "\u00BFQu\u00E9 deber\u00EDa mirar primero un jugador?" },
+    { who: 'Bori', role: 'bori', said: "Los \u00FAltimos siete d\u00EDas. \u00BFCon qui\u00E9n pasaste tiempo realmente? No me digas a qui\u00E9n respetas. Dime con qui\u00E9n estabas." }
+  ]
+};
+
+const UI = {
+  en: { you: 'You', thinking: 'Thinking…', errGeneric: 'Something went wrong. Try again in a moment.', errRate: "You're going a bit fast. Wait a moment and try again." },
+  es: { you: 'Tú', thinking: 'Pensando…', errGeneric: 'Algo salió mal. Intenta de nuevo en un momento.', errRate: 'Vas un poco rápido. Espera un momento e intenta de nuevo.' }
+};
+
+// ============================================================
+// LANGUAGE
+// ============================================================
+let lang = 'en';
+const langButtons = document.querySelectorAll('.lang-btn');
+const translatable = document.querySelectorAll('[data-en][data-es]');
+
+function renderScript() {
+  const wrap = document.getElementById('script-bubbles');
+  wrap.innerHTML = '';
+  SCRIPT[lang].forEach(line => {
+    const div = document.createElement('div');
+    div.className = `bubble ${line.role}`;
+    const strong = document.createElement('strong');
+    strong.textContent = line.who;
+    const span = document.createElement('span');
+    span.textContent = line.said;
+    div.appendChild(strong);
+    div.appendChild(span);
+    wrap.appendChild(div);
+  });
+}
+
+function setLanguage(l) {
+  lang = l;
+  translatable.forEach(el => {
+    const text = el.getAttribute('data-' + l);
+    if (text) el.innerHTML = text;
+  });
+  document.querySelectorAll('[data-en-ph][data-es-ph]').forEach(el => {
+    const ph = el.getAttribute('data-' + l + '-ph');
+    if (ph) el.setAttribute('placeholder', ph);
+  });
+  langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === l));
+  document.documentElement.lang = l;
+  renderScript();
+  try { localStorage.setItem('grhLang', l); } catch (e) {}
+}
+
+langButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+let savedLang = 'en';
+try { savedLang = localStorage.getItem('grhLang') || 'en'; } catch (e) {}
+setLanguage(savedLang);
+
+// ============================================================
+// STEP STRIP
+// ============================================================
+const stepPills = document.querySelectorAll('.step-pill');
+const sections = document.querySelectorAll('section');
+function updateStepStrip() {
+  const scrollY = window.scrollY + window.innerHeight * 0.35;
+  let active = 0;
+  for (let i = 0; i < 3; i++) {
+    if (sections[i] && sections[i].offsetTop <= scrollY) active = i;
+  }
+  stepPills.forEach((p, i) => p.classList.toggle('current', i === active));
+}
+window.addEventListener('scroll', updateStepStrip, { passive: true });
+window.addEventListener('load', updateStepStrip);
+
+// ============================================================
+// CHAT WITH BORI — streaming
+// ============================================================
+const history = [];
+const chatEl = document.getElementById('chat');
+const inputEl = document.getElementById('input');
+const sendEl = document.getElementById('send');
+const errEl = document.getElementById('err');
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const who = document.createElement('span');
+  who.className = 'msg-who';
+  who.textContent = role === 'bori' ? 'Bori' : UI[lang].you;
+  const txt = document.createElement('span');
+  txt.className = 'msg-text';
+  txt.textContent = text;
+  div.appendChild(who);
+  div.appendChild(txt);
+  chatEl.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  return div;
+}
+
+function showError(msg) { errEl.textContent = msg; errEl.classList.add('visible'); }
+function clearError() { errEl.textContent = ''; errEl.classList.remove('visible'); }
+
+async function send() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+  clearError();
+
+  addMessage('player', text);
+  history.push({ role: 'user', content: text });
+  inputEl.value = '';
+  sendEl.disabled = true;
+
+  const boriNode = addMessage('bori', '');
+  const txtEl = boriNode.querySelector('.msg-text');
+  txtEl.classList.add('streaming');
+
+  let accumulated = '';
+  let gotAnyText = false;
+
+  try {
+    const res = await fetch('/api/episode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ episode: EPISODE_ID, messages: history })
+    });
+
+    if (!res.ok || !res.body) {
+      txtEl.classList.remove('streaming');
+      boriNode.remove();
+      showError(res.status === 429 ? UI[lang].errRate : UI[lang].errGeneric);
+      sendEl.disabled = false;
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const events = buffer.split('\n\n');
+      buffer = events.pop();
+
+      for (const evt of events) {
+        for (const line of evt.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (!data) continue;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'text') {
+              accumulated += parsed.text;
+              txtEl.textContent = accumulated;
+              gotAnyText = true;
+              boriNode.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          } catch {}
+        }
+      }
+    }
+  } catch {}
+
+  txtEl.classList.remove('streaming');
+
+  if (!gotAnyText) {
+    boriNode.remove();
+    showError(UI[lang].errGeneric);
+  } else {
+    history.push({ role: 'assistant', content: accumulated });
+  }
+
+  sendEl.disabled = false;
+  inputEl.focus();
+}
+
+sendEl.addEventListener('click', send);
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
+</script>
+
+</body>
+</html>

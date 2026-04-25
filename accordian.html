@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BPM ChatCast — Accordion Episode Prototype</title>
+  <style>
+    :root{
+      --bg:#07070b;
+      --panel:#101018;
+      --panel2:#171724;
+      --gold:#e8b94a;
+      --gold2:#ffcf62;
+      --text:#f5f1e8;
+      --muted:#a9a395;
+      --line:rgba(232,185,74,.25);
+      --success:#43d17a;
+      --danger:#ff5c7a;
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      min-height:100vh;
+      font-family:Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(232,185,74,.18), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,.07), transparent 32%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      padding:24px;
+    }
+
+    .app{
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    header{
+      text-align:center;
+      padding:34px 18px 24px;
+    }
+
+    .eyebrow{
+      color:var(--gold);
+      text-transform:uppercase;
+      font-size:.8rem;
+      letter-spacing:.18em;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    h1{
+      font-size:clamp(2.2rem, 7vw, 5rem);
+      line-height:.95;
+      text-transform:uppercase;
+      letter-spacing:-.05em;
+      margin-bottom:16px;
+    }
+
+    h1 span{color:var(--gold)}
+
+    .subtitle{
+      max-width:720px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:1.05rem;
+    }
+
+    .lang-toggle{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin:22px 0 6px;
+    }
+
+    .lang-toggle button{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 18px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .lang-toggle button.active{
+      background:var(--gold);
+      color:#111;
+      border-color:var(--gold);
+    }
+
+    .progress-card{
+      background:linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      margin:20px 0;
+      position:sticky;
+      top:10px;
+      z-index:10;
+      backdrop-filter:blur(12px);
+    }
+
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .progress-label{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-size:.85rem;
+    }
+
+    .progress-count{
+      color:var(--gold);
+      font-weight:900;
+    }
+
+    .bar{
+      height:12px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .bar-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--gold), var(--gold2));
+      border-radius:999px;
+      transition:width .35s ease;
+    }
+
+    .episode-card{
+      background:rgba(16,16,24,.92);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:0 18px 60px rgba(0,0,0,.32);
+    }
+
+    .accordion-item{
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.035);
+      border-radius:18px;
+      overflow:hidden;
+      margin-bottom:14px;
+    }
+
+    .accordion-btn{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:var(--text);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:18px;
+      cursor:pointer;
+      text-align:left;
+      font-size:1rem;
+      font-weight:900;
+    }
+
+    .accordion-btn:disabled{
+      cursor:not-allowed;
+      opacity:.42;
+    }
+
+    .step-title span{
+      color:var(--gold);
+    }
+
+    .status{
+      font-size:.78rem;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .accordion-content{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .35s ease;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    .accordion-content.open{
+      max-height:900px;
+    }
+
+    .inner{
+      padding:18px;
+      color:#ddd8ce;
+    }
+
+    .chat-line{
+      margin-bottom:16px;
+      padding:15px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+    }
+
+    .speaker{
+      display:block;
+      color:var(--gold);
+      font-weight:900;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      font-size:.8rem;
+      letter-spacing:.08em;
+    }
+
+    .complete-btn{
+      margin-top:10px;
+      border:0;
+      background:var(--gold);
+      color:#111;
+      border-radius:999px;
+      padding:11px 18px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .complete-btn.done{
+      background:var(--success);
+    }
+
+    .reflection-box{
+      background:linear-gradient(135deg, rgba(232,185,74,.14), rgba(255,255,255,.04));
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:22px;
+      margin-top:18px;
+    }
+
+    .reflection-box.locked{
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    label{
+      display:block;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:#0d0d14;
+      color:var(--text);
+      padding:14px;
+      font-size:1rem;
+      margin-bottom:12px;
+    }
+
+    textarea{
+      min-height:88px;
+      resize:vertical;
+    }
+
+    .bori-response{
+      display:none;
+      margin-top:16px;
+      background:rgba(0,0,0,.28);
+      border-left:4px solid var(--gold);
+      border-radius:14px;
+      padding:16px;
+    }
+
+    .unlock-card{
+      display:none;
+      margin-top:20px;
+      text-align:center;
+      border:1px solid rgba(67,209,122,.35);
+      background:rgba(67,209,122,.09);
+      border-radius:20px;
+      padding:22px;
+    }
+
+    .unlock-card h3{
+      color:var(--success);
+      margin-bottom:8px;
+      text-transform:uppercase;
+    }
+
+    .next-btn{
+      display:inline-block;
+      margin-top:14px;
+      text-decoration:none;
+      background:var(--success);
+      color:#07110b;
+      font-weight:900;
+      padding:12px 18px;
+      border-radius:999px;
+    }
+
+    .note{
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:10px;
+    }
+
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="eyebrow" data-en="BPM ChatCast · Level 1 Awareness" data-es="BPM ChatCast · Nivel 1 Conciencia">BPM ChatCast · Level 1 Awareness</div>
+      <h1 data-en="Episode 009<br><span>Discipline</span>" data-es="Episodio 009<br><span>Disciplina</span>">Episode 009<br><span>Discipline</span></h1>
+      <p class="subtitle" data-en="A locked guided conversation. Read each section, mark it complete, then answer the final reflection to unlock the next episode." data-es="Una conversación guiada y protegida. Lee cada sección, márcala como completada y contesta la reflexión final para desbloquear el próximo episodio.">A locked guided conversation. Read each section, mark it complete, then answer the final reflection to unlock the next episode.</p>
+      <div class="lang-toggle">
+        <button class="active" onclick="setLang('en')">English</button>
+        <button onclick="setLang('es')">Español</button>
+      </div>
+    </header>
+
+    <section class="progress-card">
+      <div class="progress-top">
+        <div class="progress-label" data-en="Episode Engagement" data-es="Interacción del Episodio">Episode Engagement</div>
+        <div class="progress-count"><span id="completedCount">0</span>/<span id="totalCount">5</span> complete</div>
+      </div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <p class="note" data-en="The final question unlocks only after every conversation section is completed." data-es="La pregunta final se desbloquea solo después de completar cada sección de la conversación.">The final question unlocks only after every conversation section is completed.</p>
+    </section>
+
+    <section class="episode-card">
+      <div class="accordion-item" data-step="0">
+        <button class="accordion-btn" onclick="openStep(0)">
+          <span class="step-title" data-en="Public Discipline Is Acting. <span>Private Discipline Is Who You Actually Are.</span>" data-es="La Disciplina Pública Es Actuar. <span>La Disciplina Privada Es Quién Eres Realmente.</span>">Public Discipline Is Acting. <span>Private Discipline Is Who You Actually Are.</span></span>
+          <span class="status" id="status-0">Open</span>
+        </button>
+        <div class="accordion-content" id="content-0">
+          <div class="inner">
+            <div class="chat-line"><span class="speaker">Host Bot</span><span data-en="Why are coaches obsessed with what players do off the court when the games are won on the court?" data-es="¿Por qué los coaches están obsesionados con lo que los jugadores hacen fuera de la cancha cuando los juegos se ganan en la cancha?">Why are coaches obsessed with what players do off the court when the games are won on the court?</span></div>
+            <div class="chat-line"><span class="speaker">Bori</span><span data-en="Because the games are won on the court. But the off-court is what determines whether the on-court ever shows up. Saturday is the test. The week is the answer." data-es="Porque los juegos se ganan en la cancha. Pero lo de fuera de la cancha determina si lo de la cancha aparece. El sábado es el examen. La semana es la respuesta.">Because the games are won on the court. But the off-court is what determines whether the on-court ever shows up. Saturday is the test. The week is the answer.</span></div>
+            <button class="complete-btn" onclick="completeStep(0, event)">Mark Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" data-step="1">
+        <button class="accordion-btn" onclick="openStep(1)" disabled>
+          <span class="step-title" data-en="Public vs Private" data-es="Público vs Privado">Public vs Private</span>
+          <span class="status" id="status-1">Locked</span>
+        </button>
+        <div class="accordion-content" id="content-1">
+          <div class="inner">
+            <div class="chat-line"><span class="speaker">Host Bot</span><span data-en="What's the actual difference between public and private?" data-es="¿Cuál es la diferencia real entre público y privado?">What's the actual difference between public and private?</span></div>
+            <div class="chat-line"><span class="speaker">Bori</span><span data-en="Public is what you do when you know someone is watching. Private is what you do when nobody would ever know." data-es="Público es lo que haces cuando sabes que alguien te ve. Privado es lo que haces cuando nadie nunca lo sabría.">Public is what you do when you know someone is watching. Private is what you do when nobody would ever know.</span></div>
+            <button class="complete-btn" onclick="completeStep(1, event)">Mark Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" data-step="2">
+        <button class="accordion-btn" onclick="openStep(2)" disabled>
+          <span class="step-title" data-en="The Gap Is Who You Actually Are" data-es="La Diferencia Es Quién Eres Realmente">The Gap Is Who You Actually Are</span>
+          <span class="status" id="status-2">Locked</span>
+        </button>
+        <div class="accordion-content" id="content-2">
+          <div class="inner">
+            <div class="chat-line"><span class="speaker">Host Bot</span><span data-en="And the gap between those two?" data-es="¿Y la diferencia entre esos dos?">And the gap between those two?</span></div>
+            <div class="chat-line"><span class="speaker">Bori</span><span data-en="The gap is who you actually are. If those two are the same player — that's discipline. If they're different — that's performance." data-es="La diferencia es quién eres realmente. Si esos dos son el mismo jugador — eso es disciplina. Si son diferentes — eso es actuar.">The gap is who you actually are. If those two are the same player — that's discipline. If they're different — that's performance.</span></div>
+            <button class="complete-btn" onclick="completeStep(2, event)">Mark Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" data-step="3">
+        <button class="accordion-btn" onclick="openStep(3)" disabled>
+          <span class="step-title" data-en="What Private Discipline Looks Like" data-es="Cómo Se Ve La Disciplina Privada">What Private Discipline Looks Like</span>
+          <span class="status" id="status-3">Locked</span>
+        </button>
+        <div class="accordion-content" id="content-3">
+          <div class="inner">
+            <div class="chat-line"><span class="speaker">Host Bot</span><span data-en="What does private discipline actually look like?" data-es="¿Cómo se ve la disciplina privada en realidad?">What does private discipline actually look like?</span></div>
+            <div class="chat-line"><span class="speaker">Bori</span><span data-en="It's small. It's boring. It's filling your water bottle the night before. Tiny. Unwitnessed. Stacks up to the player a coach can build around." data-es="Es pequeña. Es aburrida. Es llenar tu botella de agua la noche antes. Pequeño. Sin testigos. Se acumula al jugador alrededor del que un coach puede construir.">It's small. It's boring. It's filling your water bottle the night before. Tiny. Unwitnessed. Stacks up to the player a coach can build around.</span></div>
+            <button class="complete-btn" onclick="completeStep(3, event)">Mark Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="reflection-box locked" id="reflectionBox">
+        <label for="reflectionSelect" data-en="Final Question: Who are you when nobody is watching?" data-es="Pregunta Final: ¿Quién eres cuando nadie te ve?">Final Question: Who are you when nobody is watching?</label>
+        <select id="reflectionSelect" onchange="handleReflection()">
+          <option value="" data-en="Choose your honest answer..." data-es="Escoge tu respuesta honesta...">Choose your honest answer...</option>
+          <option value="private-win" data-en="I followed through on something private." data-es="Cumplí con algo privado.">I followed through on something private.</option>
+          <option value="private-fail" data-en="I said I would do something and didn't." data-es="Dije que haría algo y no lo hice.">I said I would do something and didn't.</option>
+          <option value="public-only" data-en="I mostly show discipline when others are watching." data-es="Mayormente muestro disciplina cuando otros me ven.">I mostly show discipline when others are watching.</option>
+          <option value="no-extra" data-en="I don't really do extra things alone yet." data-es="Todavía no hago cosas extras cuando estoy solo.">I don't really do extra things alone yet.</option>
+          <option value="inconsistent" data-en="I'm inconsistent, but I know it." data-es="Soy inconsistente, pero lo reconozco.">I'm inconsistent, but I know it.</option>
+        </select>
+
+        <textarea id="reflectionNote" maxlength="180" placeholder="Optional: write one specific moment from yesterday."></textarea>
+
+        <div class="bori-response" id="boriResponse"></div>
+      </div>
+
+      <div class="unlock-card" id="unlockCard">
+        <h3 data-en="Episode Complete" data-es="Episodio Completado">Episode Complete</h3>
+        <p data-en="You completed every section and answered the final reflection. The next episode is now unlocked." data-es="Completaste cada sección y contestaste la reflexión final. El próximo episodio ya está desbloqueado.">You completed every section and answered the final reflection. The next episode is now unlocked.</p>
+        <a class="next-btn" href="episode-010.html" data-en="Open Episode 010" data-es="Abrir Episodio 010">Open Episode 010</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const totalSteps = 4;
+    const completed = new Set();
+    let currentLang = 'en';
+    const responses = {
+      en:{
+        'private-win':'That is the actual thing. Private discipline counts because nobody had to see it for it to matter. What made that day different? What set you up to follow through?',
+        'private-fail':'That honesty matters. This is the moment most players lie to themselves. What got in the way? Be specific. The next disciplined rep starts there.',
+        'public-only':'That is the easier muscle. Practice matters, but what about when there is no practice, no coach, no witness? Name one private thing you can own this week.',
+        'no-extra':'Good. Most players do not admit that. No shame. What is one small private thing you could do this week that you would respect yourself for doing?',
+        'inconsistent':'Inconsistent is human. The question is not perfection. The question is the next decision in front of you — and what the disciplined version of that decision looks like.'
+      },
+      es:{
+        'private-win':'Eso es lo real. La disciplina privada cuenta porque nadie tuvo que verla para que importara. ¿Qué hizo ese día diferente? ¿Qué te ayudó a cumplir?',
+        'private-fail':'Esa honestidad importa. Este es el momento donde muchos jugadores se mienten. ¿Qué se metió en el medio? Sé específico. La próxima repetición disciplinada empieza ahí.',
+        'public-only':'Ese es el músculo más fácil. La práctica importa, pero ¿qué pasa cuando no hay práctica, no hay coach, no hay testigo? Nombra una cosa privada que puedas hacer esta semana.',
+        'no-extra':'Bien. La mayoría de los jugadores no admite eso. Sin vergüenza. ¿Cuál es una cosa pequeña y privada que podrías hacer esta semana que te haría respetarte más?',
+        'inconsistent':'Ser inconsistente es humano. La pregunta no es perfección. La pregunta es la próxima decisión frente a ti — y cómo se ve la versión disciplinada de esa decisión.'
+      }
+    };
+
+    document.getElementById('totalCount').textContent = totalSteps + 1;
+
+    function openStep(index){
+      for(let i=0;i<totalSteps;i++){
+        document.getElementById(`content-${i}`).classList.remove('open');
+      }
+      document.getElementById(`content-${index}`).classList.add('open');
+    }
+
+    function completeStep(index, event){
+      event.stopPropagation();
+      completed.add(index);
+      event.target.textContent = currentLang === 'en' ? 'Completed' : 'Completado';
+      event.target.classList.add('done');
+      document.getElementById(`status-${index}`).textContent = currentLang === 'en' ? 'Done' : 'Listo';
+
+      const next = index + 1;
+      if(next < totalSteps){
+        const nextBtn = document.querySelector(`[data-step="${next}"] .accordion-btn`);
+        nextBtn.disabled = false;
+        document.getElementById(`status-${next}`).textContent = currentLang === 'en' ? 'Open' : 'Abrir';
+        openStep(next);
+      }
+
+      if(completed.size === totalSteps){
+        document.getElementById('reflectionBox').classList.remove('locked');
+      }
+
+      updateProgress();
+    }
+
+    function handleReflection(){
+      const selected = document.getElementById('reflectionSelect').value;
+      const box = document.getElementById('boriResponse');
+      if(!selected) return;
+      box.style.display = 'block';
+      box.innerHTML = `<span class="speaker">Bori</span>${responses[currentLang][selected]}`;
+      document.getElementById('unlockCard').style.display = 'block';
+      updateProgress(true);
+    }
+
+    function updateProgress(finalDone=false){
+      const count = completed.size + (finalDone || document.getElementById('unlockCard').style.display === 'block' ? 1 : 0);
+      document.getElementById('completedCount').textContent = count;
+      document.getElementById('barFill').style.width = `${(count/(totalSteps+1))*100}%`;
+    }
+
+    function setLang(lang){
+      currentLang = lang;
+      document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.innerHTML = el.getAttribute(`data-${lang}`);
+      });
+
+      document.getElementById('reflectionNote').placeholder = lang === 'en'
+        ? 'Optional: write one specific moment from yesterday.'
+        : 'Opcional: escribe un momento específico de ayer.';
+
+      const selected = document.getElementById('reflectionSelect').value;
+      if(selected){
+        document.getElementById('boriResponse').innerHTML = `<span class="speaker">Bori</span>${responses[currentLang][selected]}`;
+      }
+    }
+  </script>
+</body>
+</html>

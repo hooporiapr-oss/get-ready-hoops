@@ -75,6 +75,8 @@ a{text-decoration:none;color:inherit}
 .btn.outline .coming-tag{background:rgba(232,185,74,.2);color:var(--gold)}
 .live-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;background:rgba(0,0,0,.18);color:#111;padding:3px 9px;border-radius:8px;letter-spacing:1.5px;font-weight:700;}
 .live-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:#cc0030;box-shadow:0 0 8px #ff3a5e;animation:livePulse 1.6s ease-in-out infinite;}
+.btn.outline .live-tag{background:rgba(232,185,74,.2);color:var(--gold);}
+.btn.outline .live-tag::before{background:var(--gold);box-shadow:0 0 8px rgba(232,185,74,.7);}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
 
 .light-row{display:flex;justify-content:center;gap:14px;margin-top:50px;}
@@ -182,7 +184,7 @@ section{padding:86px 7%}
   <div class="hero-content">
     <div class="eyebrow">
       <span class="dot"></span>
-      <span data-en="Episodes 001 &amp; 002 Are Live" data-es="Episodios 001 y 002 Están En Vivo">Episodes 001 &amp; 002 Are Live</span>
+      <span data-en="Episodes 001 — 006 Are Live" data-es="Episodios 001 — 006 Están En Vivo">Episodes 001 — 006 Are Live</span>
     </div>
 
     <h1 data-en="Get Ready <span>Hoops</span>" data-es="Get Ready <span>Hoops</span>">Get Ready <span>Hoops</span></h1>
@@ -197,6 +199,10 @@ section{padding:86px 7%}
       <a href="/episode-001.html" class="btn gold">
         <span data-en="Start Episode 001" data-es="Empezar Episodio 001">Start Episode 001</span>
         <span class="live-tag" data-en="Live" data-es="En Vivo">Live</span>
+      </a>
+      <a href="/episode-006.html" class="btn outline">
+        <span data-en="Latest: Episode 006" data-es="Lo Último: Episodio 006">Latest: Episode 006</span>
+        <span class="live-tag" data-en="New" data-es="Nuevo">New</span>
       </a>
     </div>
 
@@ -304,45 +310,49 @@ section{padding:86px 7%}
       <div class="ep-watch-cta" data-en="Start Episode" data-es="Empezar Episodio">Start Episode</div>
     </a>
 
-    <div class="ep-card">
+    <a href="/episode-003.html" class="ep-card live">
       <div class="ep-num">
         <span data-en="Episode 003" data-es="Episodio 003">Episode 003</span>
-        <span class="ep-soon-pill" data-en="Coming Soon" data-es="Próximamente">Coming Soon</span>
+        <span class="ep-live-pill" data-en="Live" data-es="En Vivo">Live</span>
       </div>
       <h3 data-en="Influence" data-es="Influencia">Influence</h3>
       <p data-en="The people around a player shape their decisions more than they realize." data-es="Las personas alrededor de un jugador moldean sus decisiones más de lo que piensan.">The people around a player shape their decisions more than they realize.</p>
       <p class="ep-question" data-en="Question: Who is really influencing you?" data-es="Pregunta: ¿Quién realmente te está influenciando?">Question: Who is really influencing you?</p>
-    </div>
+      <div class="ep-watch-cta" data-en="Start Episode" data-es="Empezar Episodio">Start Episode</div>
+    </a>
 
-    <div class="ep-card">
+    <a href="/episode-004.html" class="ep-card live">
       <div class="ep-num">
         <span data-en="Episode 004" data-es="Episodio 004">Episode 004</span>
-        <span class="ep-soon-pill" data-en="Coming Soon" data-es="Próximamente">Coming Soon</span>
+        <span class="ep-live-pill" data-en="Live" data-es="En Vivo">Live</span>
       </div>
       <h3 data-en="Peak Early" data-es="Pico Temprano">Peak Early</h3>
       <p data-en="Early success can create comfort, and comfort can stop growth." data-es="El éxito temprano puede crear comodidad, y la comodidad puede detener el crecimiento.">Early success can create comfort, and comfort can stop growth.</p>
       <p class="ep-question" data-en="Question: Are you still improving?" data-es="Pregunta: ¿Sigues mejorando?">Question: Are you still improving?</p>
-    </div>
+      <div class="ep-watch-cta" data-en="Start Episode" data-es="Empezar Episodio">Start Episode</div>
+    </a>
 
-    <div class="ep-card">
+    <a href="/episode-005.html" class="ep-card live">
       <div class="ep-num">
         <span data-en="Episode 005" data-es="Episodio 005">Episode 005</span>
-        <span class="ep-soon-pill" data-en="Coming Soon" data-es="Próximamente">Coming Soon</span>
+        <span class="ep-live-pill" data-en="Live" data-es="En Vivo">Live</span>
       </div>
       <h3 data-en="What Coaches Notice" data-es="Lo Que Los Coaches Notan">What Coaches Notice</h3>
       <p data-en="Coaches don't just watch mistakes. They watch what happens after mistakes." data-es="Los coaches no solo observan los errores. Observan lo que pasa después del error.">Coaches don't just watch mistakes. They watch what happens after mistakes.</p>
       <p class="ep-question" data-en="Question: What do you show after a mistake?" data-es="Pregunta: ¿Qué muestras después de un error?">Question: What do you show after a mistake?</p>
-    </div>
+      <div class="ep-watch-cta" data-en="Start Episode" data-es="Empezar Episodio">Start Episode</div>
+    </a>
 
-    <div class="ep-card">
+    <a href="/episode-006.html" class="ep-card live">
       <div class="ep-num">
         <span data-en="Episode 006" data-es="Episodio 006">Episode 006</span>
-        <span class="ep-soon-pill" data-en="Coming Soon" data-es="Próximamente">Coming Soon</span>
+        <span class="ep-live-pill" data-en="Live" data-es="En Vivo">Live</span>
       </div>
       <h3 data-en="After Opportunity" data-es="Después De La Oportunidad">After Opportunity</h3>
       <p data-en="Getting a chance is not the same as being ready to keep it." data-es="Recibir una oportunidad no es lo mismo que estar listo para mantenerla.">Getting a chance is not the same as being ready to keep it.</p>
       <p class="ep-question" data-en="Question: Are you ready or just chasing?" data-es="Pregunta: ¿Estás listo o solo persiguiendo?">Question: Are you ready or just chasing?</p>
-    </div>
+      <div class="ep-watch-cta" data-en="Start Episode" data-es="Empezar Episodio">Start Episode</div>
+    </a>
 
     <div class="ep-card">
       <div class="ep-num">
@@ -402,13 +412,17 @@ section{padding:86px 7%}
 
 <section id="start" class="cta">
   <h2 data-en="Train Your Game.<br><span>Understand Your Value.</span>" data-es="Entrena Tu Juego.<br><span>Entiende Tu Valor.</span>">Train Your Game.<br><span>Understand Your Value.</span></h2>
-  <p data-en="Episodes 001 and 002 are live. Free to play. No account needed. More coming." data-es="Los Episodios 001 y 002 están en vivo. Gratis. Sin cuenta. Más en camino.">
-    Episodes 001 and 002 are live. Free to play. No account needed. More coming.
+  <p data-en="Six free episodes are live. Free to play. No account needed. More coming." data-es="Seis episodios gratis están en vivo. Gratis. Sin cuenta. Más en camino.">
+    Six free episodes are live. Free to play. No account needed. More coming.
   </p>
   <div class="buttons">
     <a href="/episode-001.html" class="btn gold">
       <span data-en="Start Episode 001" data-es="Empezar Episodio 001">Start Episode 001</span>
       <span class="live-tag" data-en="Live" data-es="En Vivo">Live</span>
+    </a>
+    <a href="/episode-006.html" class="btn outline">
+      <span data-en="Latest: Episode 006" data-es="Lo Último: Episodio 006">Latest: Episode 006</span>
+      <span class="live-tag" data-en="New" data-es="Nuevo">New</span>
     </a>
   </div>
 </section>

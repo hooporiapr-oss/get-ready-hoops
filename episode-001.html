@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Episode 001: Basketball Money — Get Ready Hoops</title>
+<meta name="description" content="Why players get opportunities — and why talent alone is not enough. The first episode of Get Ready Hoops with Bori." />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1c1c1c;
+    --border: #2a2a2a;
+    --text: #ededed;
+    --muted: #8a8a8a;
+    --accent: #ff7a00;
+    --bori: #ff7a00;
+    --host: #d4d4d4;
+    --player: #6ea8ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header.top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 32px;
+  }
+  .brand { font-weight: 700; letter-spacing: 0.2px; }
+  .brand a { color: var(--text); }
+  .lang {
+    display: inline-flex; gap: 0; border: 1px solid var(--border); border-radius: 999px; overflow: hidden;
+  }
+  .lang button {
+    background: transparent; color: var(--muted); border: 0; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; font-weight: 600; letter-spacing: 0.5px;
+  }
+  .lang button.active { background: var(--text); color: var(--bg); }
+
+  .badge {
+    display: inline-block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 40px; line-height: 1.15; margin: 0 0 12px; font-weight: 800; letter-spacing: -0.5px;
+  }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 32px; }
+
+  .step-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    margin: 40px 0 12px;
+  }
+
+  .script {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 8px 4px;
+  }
+  .line {
+    display: grid; grid-template-columns: 70px 1fr; gap: 12px;
+    padding: 14px 16px;
+  }
+  .line + .line { border-top: 1px solid var(--border); }
+  .who {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .who.host { color: var(--host); }
+  .who.bori { color: var(--bori); }
+  .said { color: var(--text); font-size: 15.5px; }
+
+  .question-block {
+    margin: 40px 0 24px; padding: 28px 24px;
+    background: linear-gradient(180deg, #1a1408, #141414);
+    border: 1px solid #3a2a10; border-radius: 12px;
+  }
+  .question-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px; font-weight: 700;
+  }
+  .question {
+    font-size: 26px; line-height: 1.25; margin: 0; font-weight: 700; letter-spacing: -0.3px;
+  }
+
+  .chat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; min-height: 120px;
+  }
+  .msg { display: grid; grid-template-columns: 70px 1fr; gap: 12px; padding: 10px 4px; }
+  .msg + .msg { border-top: 1px solid var(--border); }
+  .msg .who { padding-top: 2px; }
+  .msg.bori .who { color: var(--bori); }
+  .msg.player .who { color: var(--player); }
+  .msg .said { white-space: pre-wrap; word-wrap: break-word; }
+  .msg .said.thinking { color: var(--muted); font-style: italic; }
+
+  .composer {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  .composer textarea {
+    flex: 1; resize: none; min-height: 52px; max-height: 160px;
+    background: var(--surface-2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 14px; font: inherit; font-size: 15px;
+    outline: none;
+  }
+  .composer textarea:focus { border-color: #4a4a4a; }
+  .composer button {
+    background: var(--text); color: var(--bg); border: 0; border-radius: 10px;
+    padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 14px; letter-spacing: 0.3px;
+  }
+  .composer button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .hint { color: var(--muted); font-size: 13px; margin: 8px 2px 0; }
+  .err { color: #ff6b6b; font-size: 13px; margin: 8px 2px 0; }
+
+  .cta-row {
+    margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 12px; align-items: flex-start;
+  }
+  .cta-row h3 { margin: 0; font-size: 20px; font-weight: 700; }
+  .cta-row p { margin: 0; color: var(--muted); font-size: 15px; }
+  .cta-row a.btn {
+    display: inline-block; padding: 12px 20px; background: var(--text); color: var(--bg);
+    border-radius: 999px; font-weight: 700; font-size: 14px; letter-spacing: 0.3px;
+  }
+  .cta-row a.btn:hover { text-decoration: none; opacity: 0.9; }
+
+  footer.foot {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 13px;
+  }
+  footer.foot p { margin: 0 0 8px; }
+
+  @media (max-width: 540px) {
+    h1 { font-size: 30px; }
+    .question { font-size: 22px; }
+    .line, .msg { grid-template-columns: 56px 1fr; gap: 10px; }
+    .who { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand"><a href="/">Get Ready Hoops</a></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-en" class="active" type="button">EN</button>
+      <button id="lang-es" type="button">ES</button>
+    </div>
+  </header>
+
+  <div class="badge" data-i18n="badge">Episode 001 · Free Preview</div>
+  <h1 data-i18n="title">Basketball Money</h1>
+  <p class="sub" data-i18n="sub">Why players get opportunities — and why talent alone is not enough.</p>
+
+  <!-- STEP 1: LISTEN -->
+  <div class="step-label" data-i18n="step1">Step 1 — Listen</div>
+  <div class="script" id="script">
+    <!-- lines injected by JS so they swap with language -->
+  </div>
+
+  <!-- STEP 2: REFLECT -->
+  <div class="step-label" data-i18n="step2">Step 2 — Reflect</div>
+  <div class="question-block">
+    <div class="question-label" data-i18n="qLabel">The Question</div>
+    <p class="question" id="question" data-i18n="question">Why would someone choose you?</p>
+  </div>
+
+  <!-- STEP 3: TALK -->
+  <div class="step-label" data-i18n="step3">Step 3 — Talk With Bori</div>
+  <div class="chat" id="chat" aria-live="polite">
+    <div class="msg bori">
+      <div class="who">Bori</div>
+      <div class="said" data-i18n="boriOpener">Take your time. There's no right answer here. Just be real with me — why would someone choose you?</div>
+    </div>
+  </div>
+  <div class="composer">
+    <textarea id="input" rows="2" data-i18n-ph="placeholder" placeholder="Type your answer to Bori…"></textarea>
+    <button id="send" type="button" data-i18n="send">Send</button>
+  </div>
+  <div class="hint" id="hint" data-i18n="hint">Free preview. Refresh resets the conversation.</div>
+  <div class="err" id="err" style="display:none"></div>
+
+  <div class="cta-row">
+    <h3 data-i18n="ctaTitle">That's Episode 001.</h3>
+    <p data-i18n="ctaBody">There are 29 more. Each one ends with a question you can't ignore.</p>
+    <a class="btn" href="/" data-i18n="ctaBtn">See All Episodes</a>
+  </div>
+
+  <footer class="foot">
+    <p data-i18n="disc">Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.</p>
+    <p>© 2026 Get Ready Hoops</p>
+  </footer>
+
+</div>
+
+<script>
+  // ---------- i18n ----------
+  const STR = {
+    en: {
+      badge: "Episode 001 · Free Preview",
+      title: "Basketball Money",
+      sub: "Why players get opportunities — and why talent alone is not enough.",
+      step1: "Step 1 — Listen",
+      step2: "Step 2 — Reflect",
+      step3: "Step 3 — Talk With Bori",
+      qLabel: "The Question",
+      question: "Why would someone choose you?",
+      boriOpener: "Take your time. There's no right answer here. Just be real with me — why would someone choose you?",
+      placeholder: "Type your answer to Bori…",
+      send: "Send",
+      hint: "Free preview. Refresh resets the conversation.",
+      ctaTitle: "That's Episode 001.",
+      ctaBody: "There are 29 more. Each one ends with a question you can't ignore.",
+      ctaBtn: "See All Episodes",
+      disc: "Get Ready Hoops provides educational content only. We do not provide legal, financial, contract, representation, or recruiting advice. For your specific situation, work with a sports attorney, CPA, or certified advisor.",
+      thinking: "Thinking…",
+      errGeneric: "Something went wrong. Try again in a moment.",
+      script: [
+        { who: "Host Bot", role: "host", said: "Why does everybody talk about basketball money, but nobody explains how it really works?" },
+        { who: "Bori", role: "bori", said: "Because most players see the results, not the system. They see the contract, the deal, the shoes. They don't see the years of choices that made someone worth choosing." },
+        { who: "Host Bot", role: "host", said: "So talent is not enough?" },
+        { who: "Bori", role: "bori", said: "Talent gets you in the room. It does not keep you there. There are thousands of talented players. Coaches, teams, programs, sponsors — they don't pick the most talented. They pick the most trusted." },
+        { who: "Host Bot", role: "host", said: "What's the difference between skill and value?" },
+        { who: "Bori", role: "bori", said: "Skill is what you can do. Value is what you bring. Skill is your jumper. Value is showing up early, being coachable, making teammates better, handling pressure without breaking. Skill gets you noticed. Value gets you chosen." },
+        { who: "Host Bot", role: "host", said: "So what should a player ask first?" },
+        { who: "Bori", role: "bori", said: "Simple. Why would someone choose YOU?" }
+      ]
+    },
+    es: {
+      badge: "Episodio 001 · Vista Previa Gratis",
+      title: "Basketball Money",
+      sub: "Por qué los jugadores reciben oportunidades — y por qué el talento solo no es suficiente.",
+      step1: "Paso 1 — Escucha",
+      step2: "Paso 2 — Reflexiona",
+      step3: "Paso 3 — Habla Con Bori",
+      qLabel: "La Pregunta",
+      question: "¿Por qué alguien te elegiría a ti?",
+      boriOpener: "Tómate tu tiempo. No hay respuesta correcta. Solo sé real conmigo — ¿por qué alguien te elegiría a ti?",
+      placeholder: "Escribe tu respuesta a Bori…",
+      send: "Enviar",
+      hint: "Vista previa gratis. Recargar reinicia la conversación.",
+      ctaTitle: "Ese fue el Episodio 001.",
+      ctaBody: "Quedan 29 más. Cada uno termina con una pregunta que no puedes ignorar.",
+      ctaBtn: "Ver Todos los Episodios",
+      disc: "Get Ready Hoops ofrece contenido educativo únicamente. No brindamos asesoría legal, financiera, contractual, de representación ni de reclutamiento. Para tu situación específica, trabaja con un abogado deportivo, CPA o asesor certificado.",
+      thinking: "Pensando…",
+      errGeneric: "Algo salió mal. Intenta de nuevo en un momento.",
+      script: [
+        { who: "Host Bot", role: "host", said: "¿Por qué todo el mundo habla del basketball money, pero nadie explica cómo funciona de verdad?" },
+        { who: "Bori", role: "bori", said: "Porque la mayoría de los jugadores ve los resultados, no el sistema. Ven el contrato, el deal, los tenis. No ven los años de decisiones que hicieron a alguien digno de ser elegido." },
+        { who: "Host Bot", role: "host", said: "¿Entonces el talento no es suficiente?" },
+        { who: "Bori", role: "bori", said: "El talento te mete al cuarto. No te mantiene ahí. Hay miles de jugadores talentosos. Coaches, equipos, programas, marcas — no eligen al más talentoso. Eligen al más confiable." },
+        { who: "Host Bot", role: "host", said: "¿Cuál es la diferencia entre habilidad y valor?" },
+        { who: "Bori", role: "bori", said: "La habilidad es lo que puedes hacer. El valor es lo que aportas. La habilidad es tu tiro. El valor es llegar temprano, ser coachable, hacer mejores a tus compañeros, manejar la presión sin romperte. La habilidad te hace notar. El valor te hace elegir." },
+        { who: "Host Bot", role: "host", said: "¿Entonces qué debería preguntarse primero un jugador?" },
+        { who: "Bori", role: "bori", said: "Simple. ¿Por qué alguien te elegiría a TI?" }
+      ]
+    }
+  };
+
+  let lang = "en";
+
+  function renderScript() {
+    const wrap = document.getElementById("script");
+    wrap.innerHTML = "";
+    STR[lang].script.forEach(line => {
+      const row = document.createElement("div");
+      row.className = "line";
+      row.innerHTML = `
+        <div class="who ${line.role}">${line.who}</div>
+        <div class="said"></div>
+      `;
+      row.querySelector(".said").textContent = line.said;
+      wrap.appendChild(row);
+    });
+  }
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (STR[lang][key]) el.textContent = STR[lang][key];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+      const key = el.getAttribute("data-i18n-ph");
+      if (STR[lang][key]) el.setAttribute("placeholder", STR[lang][key]);
+    });
+    document.getElementById("lang-en").classList.toggle("active", lang === "en");
+    document.getElementById("lang-es").classList.toggle("active", lang === "es");
+    renderScript();
+  }
+
+  document.getElementById("lang-en").addEventListener("click", () => { lang = "en"; applyLang(); });
+  document.getElementById("lang-es").addEventListener("click", () => { lang = "es"; applyLang(); });
+
+  // ---------- chat with Bori ----------
+  // We don't send the scripted opener as part of conversation history — that's framing.
+  // The conversation history starts empty; the player's first message is their answer to the question.
+  const history = [];
+
+  const chatEl = document.getElementById("chat");
+  const inputEl = document.getElementById("input");
+  const sendEl = document.getElementById("send");
+  const errEl = document.getElementById("err");
+
+  function addMessage(role, text, opts = {}) {
+    const div = document.createElement("div");
+    div.className = `msg ${role}`;
+    const who = role === "bori" ? "Bori" : (lang === "es" ? "Tú" : "You");
+    div.innerHTML = `<div class="who">${who}</div><div class="said${opts.thinking ? " thinking" : ""}"></div>`;
+    div.querySelector(".said").textContent = text;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return div;
+  }
+
+  function showError(msg) {
+    errEl.textContent = msg;
+    errEl.style.display = "block";
+  }
+  function clearError() {
+    errEl.style.display = "none";
+    errEl.textContent = "";
+  }
+
+  async function send() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    clearError();
+
+    addMessage("player", text);
+    history.push({ role: "user", content: text });
+    inputEl.value = "";
+    sendEl.disabled = true;
+
+    const thinkingNode = addMessage("bori", STR[lang].thinking, { thinking: true });
+
+    try {
+      const res = await fetch("/api/episode-001", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history })
+      });
+
+      if (!res.ok) {
+        thinkingNode.remove();
+        showError(STR[lang].errGeneric);
+        sendEl.disabled = false;
+        return;
+      }
+
+      const data = await res.json();
+      thinkingNode.remove();
+
+      const reply = (data.reply || "").trim();
+      if (!reply) {
+        showError(STR[lang].errGeneric);
+        sendEl.disabled = false;
+        return;
+      }
+
+      addMessage("bori", reply);
+      history.push({ role: "assistant", content: reply });
+    } catch (e) {
+      thinkingNode.remove();
+      showError(STR[lang].errGeneric);
+    } finally {
+      sendEl.disabled = false;
+      inputEl.focus();
+    }
+  }
+
+  sendEl.addEventListener("click", send);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  // initial render
+  applyLang();
+</script>
+
+</body>
+</html>
